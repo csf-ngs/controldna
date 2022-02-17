@@ -3,7 +3,7 @@
 ========================================================================================
     nf-core/controldna
 ========================================================================================
-    Github : https://github.com/nf-core/controldna
+    Github : https://github.com/csf-ngs/controldna
     Website: https://nf-co.re/controldna
     Slack  : https://nfcore.slack.com/channels/controldna
 ----------------------------------------------------------------------------------------
