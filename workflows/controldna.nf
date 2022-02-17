@@ -36,6 +36,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
 
 /*
 ========================================================================================
@@ -49,7 +50,6 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { FASTQC                      } from '../modules/nf-core/modules/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/modules/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
-include { CUTADAPT                    } from '../modules/nf-core/modules/cutadapt/main'
 
 /*
 ========================================================================================
@@ -80,6 +80,15 @@ workflow CONTROLDNA {
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
+    //
+    //SUBWORKFLOW trim cutadapt
+    // todo false => param.skipTrim
+    TRIM_CUTADAPT(
+        INPUT_CHECK.out.reads, false
+    )
+    ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
+
+
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
@@ -96,6 +105,7 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    //ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.log.collect())
 
     MULTIQC (
         ch_multiqc_files.collect()

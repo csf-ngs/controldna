@@ -1,7 +1,7 @@
 //
 // cutadapt adapter trimming
 //
-include { CUTADAPT } from '../../modules/nf-core/cutadapt'
+include { CUTADAPT } from '../../modules/nf-core/modules/cutadapt/main.nf' addParams( ext: [args: 'XYZ'] )
 
 
 workflow TRIM_CUTADAPT {
@@ -9,8 +9,8 @@ workflow TRIM_CUTADAPT {
     take:
     reads         // channel: [ val(meta), [ reads ] ]
     skip_trimming // boolean: true/false
-    adaptor_r1    // [str]
-    adaptor_r2    // [str]
+    //#adaptor_r1    // [str]
+    //adaptor_r2    // [str]
 
     main:
     ch_versions = Channel.empty()
