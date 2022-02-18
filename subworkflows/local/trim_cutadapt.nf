@@ -1,25 +1,32 @@
 //
-// cutadapt adapter trimming
+// cutadapt adapter trimming - will be also UMI extract -> CUTADAPT
 //
-include { CUTADAPT } from '../../modules/nf-core/modules/cutadapt/main.nf' addParams( ext: [args: 'XYZ'] )
+include { CUTADAPT } from '../../modules/local/cutadapt'
 
 
 workflow TRIM_CUTADAPT {
 
+    def trueseq_pe = "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
+    def trueseq_sr = "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
+ 
     take:
     reads         // channel: [ val(meta), [ reads ] ]
     skip_trimming // boolean: true/false
-    //#adaptor_r1    // [str]
-    //adaptor_r2    // [str]
 
     main:
     ch_versions = Channel.empty()
+    
+    reads.map {
+        meta, fastq ->
+            //log.debug("${meta} ${fastq}")
+            meta.single_end ? trueseq_sr : trueseq_pe
+    }.set{ trimstring }
 
     trim_reads = reads
     trim_log   = Channel.empty()
 
     if (!skip_trimming) {
-        CUTADAPT ( reads ).reads.set { trim_reads }
+        CUTADAPT ( reads, trimstring ).reads.set{ trim_reads }
         trim_log    = CUTADAPT.out.log
         ch_versions = ch_versions.mix(CUTADAPT.out.versions.first())
     }
