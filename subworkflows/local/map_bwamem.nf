@@ -1,10 +1,9 @@
-include { BWA_MEM                     } from '../../modules/nf-core/modules/bwa/mem/main'
+include { BWA_MEM                         } from '../../modules/nf-core/modules/bwa/mem/main'
 include { SAMTOOLS_INDEX                  } from '../../modules/nf-core/modules/samtools/index/main'
 include { SAMTOOLS_MERGE                  } from '../../modules/nf-core/modules/samtools/merge/main'
 include { SAMTOOLS_SORT                   } from '../../modules/nf-core/modules/samtools/sort/main'
 include { PICARD_MARKDUPLICATES           } from '../../modules/local/picardmarkduplicates'
 include { SAMTOOLS_SORTNAME               } from '../../modules/local/samtoolssortname'
-//include { PICARD_MARKDUPLICATES           } from '../../modules/local/picardmarkduplicates'
 include { PICARD_SORTBAM                  } from '../../modules/local/picardsortbam'
 
 
@@ -33,12 +32,12 @@ workflow MAP_BWAMEM {
     SAMTOOLS_INDEX(SAMTOOLS_SORT.out.bam)
     bam_indexed = SAMTOOLS_INDEX.out.bai
     
-    metrics = PICARD_MARKDUPLICATES.out.metrics
-     
+    bam_bai =  SAMTOOLS_SORT.out.bam.join(SAMTOOLS_INDEX.out.bai)
 
     emit:
-        bam         = SAMTOOLS_SORT.out.bam               //  channel: [ val(meta), bai ]
-        bai = SAMTOOLS_INDEX.out.bai       // channel: [ val(meta), bam ]
-        duplicate_metrics = metrics
+        bam_bai     = bam_bai
+        bam         = SAMTOOLS_SORT.out.bam        //  channel: [ val(meta), bai ]
+        bai         = SAMTOOLS_INDEX.out.bai       // channel: [ val(meta), bam ]
+        dup_metrics = PICARD_MARKDUPLICATES.out.metrics
         versions    = ch_versions
 }

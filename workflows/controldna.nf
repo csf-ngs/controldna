@@ -52,9 +52,10 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { INPUT_CHECK }   from '../subworkflows/local/input_check'
 include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
-include { MAP_BWAMEM  } from '../subworkflows/local/map_bwamem'
+include { MAP_BWAMEM  }   from '../subworkflows/local/map_bwamem'
+include { BAM_DNA_QC }    from '../subworkflows/local/bam_dna_qc'
 
 /*
 ========================================================================================
@@ -114,6 +115,13 @@ workflow CONTROLDNA {
     )
     ch_versions = ch_versions.mix(MAP_BWAMEM.out.versions.first())
 
+    //move up with stopifnot
+    def fasta = params.genome ? params.genomes[ params.genome ].fasta : ""
+    BAM_DNA_QC(
+        MAP_BWAMEM.out.bam_bai, MAP_BWAMEM.out.bai, fasta
+    )
+    ch_versions = ch_versions.mix(BAM_DNA_QC.out.versions.first())
+
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
@@ -131,7 +139,9 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.trim_log.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.duplicate_metrics.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.dup_metrics.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.wgs.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.multiple.collect().ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect()
