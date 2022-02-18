@@ -17,6 +17,23 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 
+def bwa_index = params.genome ? params.genomes[ params.genome ].bwa ?: false : false
+if(bwa_index == false){
+    log.error("no valid bwa index found for genome build: ${params.genome}")
+    System.exit(1)
+} else {
+    log.info("bwa index: ${bwa_index}")    
+}
+
+// Save AWS IGenomes file containing annotation version
+def anno_readme = params.genomes[params.genome]?.readme
+if (anno_readme && file(anno_readme).exists()) {
+    file("${params.outdir}/genome/").mkdirs()
+    file(anno_readme).copyTo("${params.outdir}/genome/")
+}
+
+
+
 /*
 ========================================================================================
     CONFIG FILES
@@ -37,6 +54,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
+include { MAP_BWAMEM  } from '../subworkflows/local/map_bwamem'
 
 /*
 ========================================================================================
@@ -64,6 +82,8 @@ workflow CONTROLDNA {
 
     ch_versions = Channel.empty()
 
+
+
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
@@ -89,6 +109,11 @@ workflow CONTROLDNA {
     ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
 
 
+    MAP_BWAMEM(
+        TRIM_CUTADAPT.out.reads, Channel.fromPath(bwa_index).collect()  
+    )
+    ch_versions = ch_versions.mix(MAP_BWAMEM.out.versions.first())
+
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
@@ -106,6 +131,7 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.trim_log.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.duplicate_metrics.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect()
