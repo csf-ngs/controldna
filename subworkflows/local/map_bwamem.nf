@@ -5,7 +5,7 @@ include { SAMTOOLS_SORT                   } from '../../modules/nf-core/modules/
 include { PICARD_MARKDUPLICATES           } from '../../modules/local/picardmarkduplicates'
 include { SAMTOOLS_SORTNAME               } from '../../modules/local/samtoolssortname'
 include { PICARD_SORTBAM                  } from '../../modules/local/picardsortbam'
-
+include { EXTRACT_READGROUP               } from '../../modules/local/extractreadgroup'
 
 workflow MAP_BWAMEM {
     take:
@@ -17,7 +17,13 @@ workflow MAP_BWAMEM {
     bam_from_aligner  = Channel.empty()
     ch_versions       = Channel.empty()
 
-    BWA_MEM(reads, genome, true)
+    ch_rg = EXTRACT_READGROUP(reads)
+    reads_rg = reads.join(ch_rg).map{ m, fq, rg ->
+        m.read_group = rg
+        tuple(m, fq) 
+    }
+
+    BWA_MEM(reads_rg, genome, true)
     ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
 
     PICARD_SORTBAM(BWA_MEM.out.bam, "queryname")
