@@ -13,10 +13,15 @@ export_plots: true
 
 module_order:
     - fastqc:
-        name: 'FastQC (raw)'
-        info: 'This section of the report shows FastQC results before adapter trimming.'
+        name: 'FastQC r1 (raw)'
+        info: 'This section of the report shows read1 FastQC results before adapter trimming.'
         path_filters:
-            - './fastqc/*.zip'
+            - '*_1_fastqc.zip'
+    - fastqc:
+        name: 'FastQC r2 (raw)'
+        info: 'This section of the report shows read2 FastQC results before adapter trimming.'
+        path_filters:
+            - '*_2_fastqc.zip'
     - cutadapt
     - picard
     
