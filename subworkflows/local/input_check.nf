@@ -29,6 +29,9 @@ def create_fastq_channels(LinkedHashMap row) {
     def array = []
     if (!file(row.fastq_1).exists()) {
         exit 1, "ERROR: Please check input samplesheet -> Read 1 FastQ file does not exist!\n${row.fastq_1}"
+    } else {
+        rg = extract_rg(row.fastq_1)
+        meta.read_group = rg
     }
     if (meta.single_end) {
         array = [ meta, [ file(row.fastq_1) ] ]
@@ -39,4 +42,10 @@ def create_fastq_channels(LinkedHashMap row) {
         array = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
     }
     return array
+}
+
+
+def extract_rg(path) {
+    def ex = "${projectDir}/bin/extract_read_group.sh ${path}".execute()
+    ex.in.text
 }
