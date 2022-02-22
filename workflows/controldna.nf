@@ -67,6 +67,7 @@ include { BAM_DNA_QC }    from '../subworkflows/local/bam_dna_qc'
 // MODULE: Installed directly from nf-core/modules
 //
 include { FASTQC                      } from '../modules/nf-core/modules/fastqc/main'
+include { FASTQC as  FASTQC_TRIMMED   } from '../modules/nf-core/modules/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/modules/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 
@@ -109,6 +110,11 @@ workflow CONTROLDNA {
     )
     ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
 
+    FASTQC_TRIMMED (
+        TRIM_CUTADAPT.out.reads
+    )
+    ch_versions = ch_versions.mix(FASTQC_TRIMMED.out.versions.first())
+
 
     MAP_BWAMEM(
         TRIM_CUTADAPT.out.reads, Channel.fromPath(bwa_index).collect()  
@@ -118,7 +124,7 @@ workflow CONTROLDNA {
     //move up with stopifnot
     def fasta = params.genome ? params.genomes[ params.genome ].fasta : ""
     BAM_DNA_QC(
-        MAP_BWAMEM.out.bam_bai, MAP_BWAMEM.out.bai, fasta
+        MAP_BWAMEM.out.bam_bai, fasta
     )
     ch_versions = ch_versions.mix(BAM_DNA_QC.out.versions.first())
 
@@ -139,9 +145,11 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.trim_log.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC_TRIMMED.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.dup_metrics.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.wgs.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.multiple.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.ccurve.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect()

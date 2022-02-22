@@ -25,7 +25,11 @@ process CUTADAPT {
     def args = task.ext.args ?: trimstring
     def prefix = task.ext.prefix ?: "${meta.id}"
     def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq.gz" : "-o ${prefix}_1.trim.fastq.gz -p ${prefix}_2.trim.fastq.gz"
+    //for consistent naming of files in multiqc report (otherwise input file name)
+    def link = link_input(meta.single_end, prefix, reads)
     """
+    $link
+
     cutadapt \\
         --cores $task.cpus \\
         $args \\
@@ -37,4 +41,19 @@ process CUTADAPT {
         cutadapt: \$(cutadapt --version)
     END_VERSIONS
     """
+}
+
+
+
+def link_input(single_end, prefix, reads){
+    if(single_end){
+                """
+                [ ! -f  ${prefix}.fastq.gz ] && ln -s $reads ${prefix}.fastq.gz
+                """
+     } else {
+                """
+                [ ! -f  ${prefix}_1.fastq.gz ] && ln -s ${reads[0]} ${prefix}_1.fastq.gz
+                [ ! -f  ${prefix}_2.fastq.gz ] && ln -s ${reads[1]} ${prefix}_2.fastq.gz
+                """
+     }
 }

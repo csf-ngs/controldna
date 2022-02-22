@@ -10,6 +10,7 @@ process PICARD_SORTBAM {
     input:
     tuple val(meta), path(bam)
     val sort_order
+    val outname
 
     output:
     tuple val(meta), path("*.bam"), emit: bam
@@ -20,7 +21,7 @@ process PICARD_SORTBAM {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}_${sort_order}"
+    def prefix = task.ext.prefix ?: "${meta.id}_${outname}"
     def avail_mem = 3
     if (!task.memory) {
         log.info '[Picard SortSam] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
