@@ -9,6 +9,9 @@ report_section_order:
 
 export_plots: true
 
+table_columns_visible:
+    cutadapt:
+        percent_trimmed: False
 
 
 module_order:
