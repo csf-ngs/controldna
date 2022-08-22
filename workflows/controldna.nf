@@ -22,7 +22,7 @@ if(bwa_index == false){
     log.error("no valid bwa index found for genome build: ${params.genome}")
     System.exit(1)
 } else {
-    log.info("bwa index: ${bwa_index}")    
+    log.info("bwa index: ${bwa_index}")
 }
 
 // Save AWS IGenomes file containing annotation version
@@ -32,7 +32,8 @@ if (anno_readme && file(anno_readme).exists()) {
     file(anno_readme).copyTo("${params.outdir}/genome/")
 }
 
-
+def subsample_str = params.subsample ?: "0"
+def subsample_nr = Utils.string_number(subsample_str)
 
 /*
 ========================================================================================
@@ -52,10 +53,11 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK }   from '../subworkflows/local/input_check'
+include { INPUT_CHECK   } from '../subworkflows/local/input_check'
 include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
-include { MAP_BWAMEM  }   from '../subworkflows/local/map_bwamem'
-include { BAM_DNA_QC }    from '../subworkflows/local/bam_dna_qc'
+include { MAP_BWAMEM    } from '../subworkflows/local/map_bwamem'
+include { BAM_DNA_QC    } from '../subworkflows/local/bam_dna_qc'
+include { SEQTK_SAMPLE  } from '../subworkflows/local/subsample'
 
 /*
 ========================================================================================
@@ -70,7 +72,6 @@ include { FASTQC                      } from '../modules/nf-core/modules/fastqc/
 include { FASTQC as  FASTQC_TRIMMED   } from '../modules/nf-core/modules/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/modules/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
-
 /*
 ========================================================================================
     RUN MAIN WORKFLOW
@@ -94,11 +95,16 @@ workflow CONTROLDNA {
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 
+    SEQTK_SAMPLE (
+         INPUT_CHECK.out.reads, subsample_nr
+    )
+    ch_versions = ch_versions.mix(SEQTK_SAMPLE.out.versions.first())
+
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        INPUT_CHECK.out.reads
+         SEQTK_SAMPLE.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
@@ -117,7 +123,7 @@ workflow CONTROLDNA {
 
 
     MAP_BWAMEM(
-        TRIM_CUTADAPT.out.reads, Channel.fromPath(bwa_index).collect()  
+        TRIM_CUTADAPT.out.reads, Channel.fromPath(bwa_index).collect()
     )
     ch_versions = ch_versions.mix(MAP_BWAMEM.out.versions.first())
 

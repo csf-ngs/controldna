@@ -1,0 +1,5 @@
+ml nextflow/21.10.6
+cd /scratch/csfs/ido/tmp/vova/000000000-K6DGJ_0_R13066_20220215
+
+nextflow run ~/work/pipelines/nf-core-controldna --input nxfc_align_000000000-K6DGJ_0_R13066_samples.csv --genome GRCh38 --multiqc_title standard_dna -resume -profile cbe
+

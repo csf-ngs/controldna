@@ -37,4 +37,18 @@ class Utils {
                 "==================================================================================="
         }
     }
+
+    public static int string_number(str_num){
+        if (str_num.isInteger()) {
+              return str_num as Integer
+        } else {
+              def l = str_num.toLowerCase()
+              if(l.endsWith("m")){
+                    return (l.replace("m","") as Integer) * 1000000
+              } else if(l.endsWith("k")){
+                    return (l.replace("k","") as Integer) * 1000
+              }
+        }
+   }
+
 }

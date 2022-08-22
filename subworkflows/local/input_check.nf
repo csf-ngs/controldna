@@ -24,7 +24,6 @@ workflow INPUT_CHECK {
 def create_fastq_channels(LinkedHashMap row) {
     def meta = [:]
     meta.id           = row.sample
-    meta.single_end   = row.single_end.toBoolean()
 
     def array = []
     if (!file(row.fastq_1).exists()) {
@@ -33,13 +32,16 @@ def create_fastq_channels(LinkedHashMap row) {
         rg = extract_rg(row.fastq_1)
         meta.read_group = rg
     }
-    if (meta.single_end) {
-        array = [ meta, [ file(row.fastq_1) ] ]
-    } else {
-        if (!file(row.fastq_2).exists()) {
+    if (row.fastq_2 != null) {
+        meta.single_end = false
+        if(file(row.fastq_2).exists()) {
+            array = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
+        } else {
             exit 1, "ERROR: Please check input samplesheet -> Read 2 FastQ file does not exist!\n${row.fastq_2}"
         }
-        array = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
+    } else {
+        meta.single_end = true
+        array = [ meta, [ file(row.fastq_1) ] ]
     }
     return array
 }
