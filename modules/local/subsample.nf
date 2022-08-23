@@ -20,7 +20,7 @@ process SEQTK_SAMPLE {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}_subsample"
     if (meta.single_end) {
         if(sample_size == 0){
             """
@@ -83,5 +83,6 @@ process SEQTK_SAMPLE {
             seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
         END_VERSIONS
         """
-    }
+      }
+   }
 }

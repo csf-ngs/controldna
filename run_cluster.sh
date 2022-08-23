@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=1 ## for multithreaded change here
 ###SBATCH --mem-per-cpu=5G
 #SBATCH --mem=20G
-#SBATCH -J jobname
+#SBATCH -J wf_control_dna_align
 #SBATCH -o "%x"."%j".out
 #SBATCH -e "%x"."%j".err
 
@@ -28,6 +28,8 @@ PROJECT=$1
 SAMPLES=$2 #absolute path to samples.csv
 GENOME=$3  #"hg38 GRCm38 TAIR10 WBcel235 BDGP6 #https://emea.support.illumina.com/sequencing/sequencing_software/igenome.html  lambda 1993-04-28
 TITLE=$4
+SUB=$5
+
 
 ALIGN_WF_BASEDIR=/scratch/${USER}/ngs_alignments/control_dna/${PROJECT}
 
@@ -42,6 +44,6 @@ export NXF_OPTS='-Xms2g -Xmx8g'
 mkdir -p ${ALIGN_WF_BASEDIR}
 cd ${ALIGN_WF_BASEDIR}
 
-nextflow run ~/work/pipelines/nf-core-controldna --input ${SAMPLES} --genome ${GENOME} --multiqc_title ${TITLE} -resume -profile cbe
+nextflow run ~/work/pipelines/nf-core-controldna --input ${SAMPLES} --genome ${GENOME} --multiqc_title ${TITLE} --subsample ${SUB}  -resume -profile cbe
 
 

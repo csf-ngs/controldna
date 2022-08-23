@@ -57,7 +57,7 @@ include { INPUT_CHECK   } from '../subworkflows/local/input_check'
 include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
 include { MAP_BWAMEM    } from '../subworkflows/local/map_bwamem'
 include { BAM_DNA_QC    } from '../subworkflows/local/bam_dna_qc'
-include { SEQTK_SAMPLE  } from '../subworkflows/local/subsample'
+include { SEQTK_SAMPLE  } from '../modules/local/subsample'
 
 /*
 ========================================================================================
@@ -112,7 +112,7 @@ workflow CONTROLDNA {
     //SUBWORKFLOW trim cutadapt
     // todo false => param.skipTrim
     TRIM_CUTADAPT(
-        INPUT_CHECK.out.reads, false
+        SEQTK_SAMPLE.out.reads, false
     )
     ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
 
