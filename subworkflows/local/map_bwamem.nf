@@ -20,7 +20,7 @@ workflow MAP_BWAMEM {
     BWA_MEM(reads, genome, true)
     ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
 
-    PICARD_SORTBAM(BWA_MEM.out.bam, "queryname", "aligned")
+    PICARD_SORTBAM(BWA_MEM.out.bam, "coordinate", "aligned")
     ch_versions = ch_versions.mix(PICARD_SORTBAM.out.versions.first())
 
     PICARD_MARKDUPLICATESWITHMATECIGAR(PICARD_SORTBAM.out.bam)
