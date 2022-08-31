@@ -1,10 +1,10 @@
-include { BWA_MEM                         } from '../../modules/nf-core/modules/bwa/mem/main'
-include { SAMTOOLS_INDEX                  } from '../../modules/nf-core/modules/samtools/index/main'
-include { SAMTOOLS_MERGE                  } from '../../modules/nf-core/modules/samtools/merge/main'
-include { SAMTOOLS_SORT                   } from '../../modules/nf-core/modules/samtools/sort/main'
-include { PICARD_MARKDUPLICATES           } from '../../modules/local/picardmarkduplicates'
-include { SAMTOOLS_SORTNAME               } from '../../modules/local/samtoolssortname'
-include { PICARD_SORTBAM                  } from '../../modules/local/picardsortbam'
+include { BWA_MEM                             } from '../../modules/nf-core/modules/bwa/mem/main'
+include { SAMTOOLS_INDEX                      } from '../../modules/nf-core/modules/samtools/index/main'
+include { SAMTOOLS_MERGE                      } from '../../modules/nf-core/modules/samtools/merge/main'
+include { SAMTOOLS_SORT                       } from '../../modules/nf-core/modules/samtools/sort/main'
+include { PICARD_MARKDUPLICATESWITHMATECIGAR  } from '../../modules/local/picardmarkduplicateswithmatecigar'
+include { SAMTOOLS_SORTNAME                   } from '../../modules/local/samtoolssortname'
+include { PICARD_SORTBAM                      } from '../../modules/local/picardsortbam'
 
 
 workflow MAP_BWAMEM {
@@ -23,10 +23,10 @@ workflow MAP_BWAMEM {
     PICARD_SORTBAM(BWA_MEM.out.bam, "queryname", "aligned")
     ch_versions = ch_versions.mix(PICARD_SORTBAM.out.versions.first())
 
-    PICARD_MARKDUPLICATES(PICARD_SORTBAM.out.bam)
-    ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
+    PICARD_MARKDUPLICATESWITHMATECIGAR(PICARD_SORTBAM.out.bam)
+    ch_versions = ch_versions.mix(PICARD_MARKDUPLICATESWITHMATECIGAR.out.versions.first())
  
-    SAMTOOLS_SORT(PICARD_MARKDUPLICATES.out.bam)
+    SAMTOOLS_SORT(PICARD_MARKDUPLICATESWITHMATECIGAR.out.bam)
     ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
 
     SAMTOOLS_INDEX(SAMTOOLS_SORT.out.bam)
@@ -38,6 +38,6 @@ workflow MAP_BWAMEM {
         bam_bai     = bam_bai
         bam         = SAMTOOLS_SORT.out.bam        //  channel: [ val(meta), bai ]
         bai         = SAMTOOLS_INDEX.out.bai       // channel: [ val(meta), bam ]
-        dup_metrics = PICARD_MARKDUPLICATES.out.metrics
+        dup_metrics = PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics
         versions    = ch_versions
 }
