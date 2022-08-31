@@ -1,4 +1,4 @@
-process PICARD_MARKDUPLICATESWITHMATECIGAR {
+process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
     tag "$meta.id"
     label 'process_medium'
 
@@ -24,23 +24,22 @@ process PICARD_MARKDUPLICATESWITHMATECIGAR {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def avail_mem = 3
     if (!task.memory) {
-        log.info '[Picard MarkDuplicatesWithMateCigar] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+        log.info '[Picard UMIAwareMarkDuplicatesWithMateCigar] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
     """
     picard \\
         -Xmx${avail_mem}g \\
-        MarkDuplicatesWithMateCigar \\
+        UmiAwareMarkDuplicatesWithMateCigar \\
         $args \\
-        MINIMUM_DISTANCE=350 \\
         I=$bam \\
         O=${prefix}.md.bam \\
         M=${prefix}.MarkDuplicates.metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        picard: \$(echo \$(picard MarkDuplicates --version 2>&1) | grep -o 'Version:.*' | cut -f2- -d:)
+        picard: \$(echo \$(picard UmiAwareMarkDuplicatesWithMateCigar --version 2>&1) | grep -o 'Version:.*' | cut -f2- -d:)
     END_VERSIONS
     """
 }
