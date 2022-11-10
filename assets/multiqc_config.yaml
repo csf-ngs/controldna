@@ -37,6 +37,7 @@ module_order:
         path_filters:
             - '*trimmed_2_fastqc.zip'
     - picard
+    - mosdepth
     - preseq
 
 extra_fn_clean_exts:

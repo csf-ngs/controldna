@@ -25,4 +25,4 @@ Illumina Small RNA 5' Adapter				GATCGTCGGACT
 Nextera Transposase Sequence				CTGTCTCTTATA
 SOLID Small RNA Adapter						CGCCTTGGCCGT
 QIAGEN miRNA Adapter						AACTGTAGGCAC
-Tagmentation Adapter                        ATGTGTATAAGA
+Tagmentation Adapter						ATGTGTATAAGA
