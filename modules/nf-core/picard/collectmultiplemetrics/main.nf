@@ -44,9 +44,12 @@ process PICARD_COLLECTMULTIPLEMETRICS {
     """
 
     stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.CollectMultipleMetrics
+    touch ${prefix}.A_metrics
+    touch ${prefix}.B_metrics
     touch ${prefix}.pdf
+
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

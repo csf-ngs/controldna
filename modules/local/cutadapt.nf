@@ -13,7 +13,7 @@ process CUTADAPT {
     tuple val(meta), path(reads)
 
     output:
-    tuple val(meta), path('*.trim.fastq.gz'), emit: reads
+    tuple val(meta), path("*.fastq.gz")     , emit: reads 
     tuple val(meta), path('*.log')          , emit: log
     path "versions.yml"                     , emit: versions
 
@@ -25,7 +25,7 @@ process CUTADAPT {
     def nextera = "-a CTGTCTCTTATACACATCT " + ( meta.single_end ? "" : " -A CTGTCTCTTATACACATCT" )
 
     //default trueseq
-    def trim_string = meta.single_end ? trueseq_sr : trueseq_pe
+    def trim_string = trueseq
 
     if(meta.adapter){  
         switch(meta.adapter.toLowerCase()) {            
@@ -36,7 +36,7 @@ process CUTADAPT {
                  trim_string = nextera
                  break; 
             default: 
-                 log.error("ERROR: unknown adapter type declared for sample: ${meta.id} ${meta.adapter} ${reads}")
+                 log.error("ERROR: unknown adapter type declared for sample: ${meta.id} ${meta.adapter}")
                  System.exit(1)
                  break;
         }
@@ -45,16 +45,15 @@ process CUTADAPT {
     def prefix = task.ext.prefix ?: "${meta.id}_trimmed"
     def trimmed  = meta.single_end ? "-o ${prefix}.fastq.gz" : "-o ${prefix}_1.fastq.gz -p ${prefix}_2.fastq.gz"
     //for consistent naming of files in multiqc report (otherwise input file name)
-    def link_input = link_input(meta.single_end, prefix, reads)
-    def lreads = linked_reads(meta.single_end, prefix, reads)
+    def freads = meta.single_end ? "${reads[0]}" : "${reads[0]} ${reads[1]}"
+  
+  
     """
-    $link_input
-
     cutadapt \\
         --cores $task.cpus \\
         $trim_string \\
         $trimmed \\
-        $lreads \\
+        $freads \\
         > ${prefix}.cutadapt.log
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -77,19 +76,4 @@ process CUTADAPT {
     """
 }
 
-def linked_reads(single_end, prefix, reads){
-    single_end ? "${prefix}.fastq.gz" : "${prefix}_1.fastq.gz ${prefix}_2.fastq.gz"
-}
 
-def link_input(single_end, prefix, reads){
-    if(single_end){
-                """
-                [ ! -f  ${prefix}.fastq.gz ] && ln -s $reads ${prefix}.fastq.gz
-                """
-     } else {
-                """
-                [ ! -f  ${prefix}_1.fastq.gz ] && ln -s ${reads[0]} ${prefix}_1.fastq.gz
-                [ ! -f  ${prefix}_2.fastq.gz ] && ln -s ${reads[1]} ${prefix}_2.fastq.gz
-                """
-     }
-}

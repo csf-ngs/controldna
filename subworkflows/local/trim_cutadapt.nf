@@ -17,7 +17,7 @@ workflow TRIM_CUTADAPT {
     trim_log   = Channel.empty()
 
     if (!skip_trimming) {
-        CUTADAPT ( reads, trimstring ).reads.set{ trim_reads }
+        CUTADAPT ( reads ).reads.set{ trim_reads }
         trim_log    = CUTADAPT.out.log
         ch_versions = ch_versions.mix(CUTADAPT.out.versions.first())
     }

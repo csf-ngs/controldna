@@ -37,4 +37,16 @@ process PRESEQ_LCEXTRAP {
         preseq: \$(echo \$(preseq 2>&1) | sed 's/^.*Version: //; s/Usage:.*\$//')
     END_VERSIONS
     """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.ccurve.txt
+    touch ${prefix}.command.log
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        preseq: \$(echo \$(preseq 2>&1) | sed 's/^.*Version: //; s/Usage:.*\$//')
+    END_VERSIONS
+    """
 }

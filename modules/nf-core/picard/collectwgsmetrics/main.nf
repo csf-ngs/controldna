@@ -45,7 +45,7 @@ process PICARD_COLLECTWGSMETRICS {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}_collected_metrics
+    touch ${prefix}.CollectWgsMetrics.coverage_metrics
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -40,4 +40,16 @@ process PICARD_SORTSAM {
         picard: \$(picard SortSam --version 2>&1 | grep -o 'Version:.*' | cut -f2- -d:)
     END_VERSIONS
     """
+    
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}_${outname}"
+    """
+    touch ${prefix}.bam
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        picard: \$(picard SortSam --version 2>&1 | grep -o 'Version:.*' | cut -f2- -d:)
+    END_VERSIONS
+    """
+
 }

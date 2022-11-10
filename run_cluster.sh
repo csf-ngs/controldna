@@ -31,6 +31,10 @@ TITLE=$4
 SUB=$5
 
 
+
+STUB="-stub-run"
+STUB=""
+
 ALIGN_WF_BASEDIR=/scratch/${USER}/ngs_alignments/control_dna/${PROJECT}
 
 echo "WORK: ${ALIGN_WF_BASEDIR}"
@@ -44,6 +48,6 @@ export NXF_OPTS='-Xms2g -Xmx8g'
 mkdir -p ${ALIGN_WF_BASEDIR}
 cd ${ALIGN_WF_BASEDIR}
 
-nextflow run ~/work/pipelines/nf-core-controldna --input ${SAMPLES} --genome ${GENOME} --multiqc_title ${TITLE} --subsample ${SUB}  -resume -profile cbe
+nextflow run ~/work/pipelines/nf-core-controldna --input ${SAMPLES} --genome ${GENOME} --multiqc_title ${TITLE} --subsample ${SUB}  -resume -profile cbe $STUB
 
 

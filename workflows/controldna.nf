@@ -68,10 +68,10 @@ include { SEQTK_SAMPLE  } from '../modules/local/subsample'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { FASTQC                      } from '../modules/nf-core/modules/fastqc/main'
-include { FASTQC as  FASTQC_TRIMMED   } from '../modules/nf-core/modules/fastqc/main'
-include { MULTIQC                     } from '../modules/nf-core/modules/multiqc/main'
-include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
+include { FASTQC                      } from '../modules/nf-core/fastqc/main'
+include { FASTQC as  FASTQC_TRIMMED   } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 /*
 ========================================================================================
     RUN MAIN WORKFLOW
@@ -156,6 +156,8 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.wgs.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.multiple.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.ccurve.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.mosdepth_global.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.mosdepth_summary.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect()

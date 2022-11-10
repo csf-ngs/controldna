@@ -9,12 +9,13 @@ process MOSDEPTH {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path  bed
-    path  fasta
+    //path  bed wait for nullable input
+    //path  fasta wait for nullable input
 
     output:
     tuple val(meta), path('*.global.dist.txt')      , emit: global_txt
     tuple val(meta), path('*.summary.txt')          , emit: summary_txt
+    /**
     tuple val(meta), path('*.region.dist.txt')      , optional:true, emit: regions_txt
     tuple val(meta), path('*.per-base.d4')          , optional:true, emit: per_base_d4
     tuple val(meta), path('*.per-base.bed.gz')      , optional:true, emit: per_base_bed
@@ -25,6 +26,7 @@ process MOSDEPTH {
     tuple val(meta), path('*.quantized.bed.gz.csi') , optional:true, emit: quantized_csi
     tuple val(meta), path('*.thresholds.bed.gz')    , optional:true, emit: thresholds_bed
     tuple val(meta), path('*.thresholds.bed.gz.csi'), optional:true, emit: thresholds_csi
+    **/
     path  "versions.yml"                            , emit: versions
 
     when:
@@ -33,8 +35,8 @@ process MOSDEPTH {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def reference = fasta ? "--fasta ${fasta}" : ""
-    def interval = bed ? "--by ${bed}" : ""
+    def reference = "" // fasta ? "--fasta ${fasta}" : ""
+    def interval = "" // bed ? "--by ${bed}" : ""
     if (bed && args.contains("--by")) {
         exit 1, "'--by' can only be specified once when running mosdepth! Either remove input BED file definition or remove '--by' from 'ext.args' definition"
     }
