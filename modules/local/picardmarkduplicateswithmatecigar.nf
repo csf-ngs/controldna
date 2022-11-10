@@ -40,7 +40,21 @@ process PICARD_MARKDUPLICATESWITHMATECIGAR {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        picard: \$(echo \$(picard MarkDuplicates --version 2>&1) | grep -o 'Version:.*' | cut -f2- -d:)
+        picard: \$(echo \$(picard MarkDuplicatesWithMateCigar --version 2>&1) | grep -o 'Version:.*' | cut -f2- -d:)
     END_VERSIONS
+    """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.MarkDuplicates.metrics.txt
+    touch ${prefix}.md.bam
+    touch ${prefix}.md.bam.bai
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        picard: \$(echo \$(picard MarkDuplicatesWithMateCigar --version 2>&1) | grep -o 'Version:.*' | cut -f2- -d:)
+    END_VERSIONS
+
     """
 }

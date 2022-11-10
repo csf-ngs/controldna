@@ -85,4 +85,18 @@ process SEQTK_SAMPLE {
         """
       }
    }
+
+   stub:
+   def prefix = task.ext.prefix ?: "${meta.id}_subsample"
+   """
+   touch ${prefix}_1.fastq.gz
+   touch ${prefix}_2.fastq.gz
+
+   cat <<-END_VERSIONS > versions.yml
+   "${task.process}":
+        seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
+   END_VERSIONS
+
+   """
+
 }

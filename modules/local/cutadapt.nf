@@ -11,7 +11,6 @@ process CUTADAPT {
 
     input:
     tuple val(meta), path(reads)
-    val(trimstring)
 
     output:
     tuple val(meta), path('*.trim.fastq.gz'), emit: reads
@@ -22,9 +21,29 @@ process CUTADAPT {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: trimstring
-    def prefix = task.ext.prefix ?: "${meta.id}"
-    def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq.gz" : "-o ${prefix}_1.trim.fastq.gz -p ${prefix}_2.trim.fastq.gz"
+    def trueseq = "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA " + ( meta.single_end ? "" : " -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT" )
+    def nextera = "-a CTGTCTCTTATACACATCT " + ( meta.single_end ? "" : " -A CTGTCTCTTATACACATCT" )
+
+    //default trueseq
+    def trim_string = meta.single_end ? trueseq_sr : trueseq_pe
+
+    if(meta.adapter){  
+        switch(meta.adapter.toLowerCase()) {            
+            case "trueseq":
+                trim_string = trueseq
+                break;
+             case "nextera":
+                 trim_string = nextera
+                 break; 
+            default: 
+                 log.error("ERROR: unknown adapter type declared for sample: ${meta.id} ${meta.adapter} ${reads}")
+                 System.exit(1)
+                 break;
+        }
+    }
+
+    def prefix = task.ext.prefix ?: "${meta.id}_trimmed"
+    def trimmed  = meta.single_end ? "-o ${prefix}.fastq.gz" : "-o ${prefix}_1.fastq.gz -p ${prefix}_2.fastq.gz"
     //for consistent naming of files in multiqc report (otherwise input file name)
     def link_input = link_input(meta.single_end, prefix, reads)
     def lreads = linked_reads(meta.single_end, prefix, reads)
@@ -33,7 +52,7 @@ process CUTADAPT {
 
     cutadapt \\
         --cores $task.cpus \\
-        $args \\
+        $trim_string \\
         $trimmed \\
         $lreads \\
         > ${prefix}.cutadapt.log
@@ -41,6 +60,20 @@ process CUTADAPT {
     "${task.process}":
         cutadapt: \$(cutadapt --version)
     END_VERSIONS
+    """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}_trimmed"
+    """
+    touch ${prefix}_1.fastq.gz
+    touch ${prefix}_2.fastq.gz
+    touch ${prefix}.cutadapt.log
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        cutadapt: \$(cutadapt --version)
+    END_VERSIONS
+
     """
 }
 

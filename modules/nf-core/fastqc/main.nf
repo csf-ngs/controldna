@@ -41,4 +41,19 @@ process FASTQC {
         END_VERSIONS
         """
     }
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}_1.html
+    touch ${prefix}_1.zip
+    touch ${prefix}_2.html
+    touch ${prefix}_2.zip
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        fastqc: \$( fastqc --version | sed -e "s/FastQC v//g" )
+    END_VERSIONS
+   """
+
 }

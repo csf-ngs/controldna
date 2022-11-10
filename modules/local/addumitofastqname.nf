@@ -38,5 +38,18 @@ process ADDUMITOFASTQNAME {
         """
     }
     
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}_withumi"
+    """
+    touch ${prefix}_1.fastq.gz
+    touch ${prefix}_2.fastq.gz
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        bash: \$(echo \$(bash --version 2>&1) | head -n 1
+    END_VERSIONS
+
+    """
+
 }
 

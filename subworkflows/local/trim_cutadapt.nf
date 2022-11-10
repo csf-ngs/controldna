@@ -6,10 +6,6 @@ include { CUTADAPT } from '../../modules/local/cutadapt'
 
 workflow TRIM_CUTADAPT {
 
-    def trueseq_pe = "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
-    def trueseq_sr = "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
-    def nextera_pe = "-a CTGTCTCTTATACACATCT"
-
     take:
     reads         // channel: [ val(meta), [ reads ] ]
     skip_trimming // boolean: true/false
@@ -17,12 +13,6 @@ workflow TRIM_CUTADAPT {
     main:
     ch_versions = Channel.empty()
     
-    reads.map {
-        meta, fastq ->
-            //log.debug("${meta} ${fastq}")
-            meta.single_end ? trueseq_sr : trueseq_pe
-    }.set{ trimstring }
-
     trim_reads = reads
     trim_log   = Channel.empty()
 

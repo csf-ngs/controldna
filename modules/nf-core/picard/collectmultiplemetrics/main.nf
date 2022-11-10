@@ -42,4 +42,15 @@ process PICARD_COLLECTMULTIPLEMETRICS {
         picard: \$(picard CollectMultipleMetrics --version 2>&1 | grep -o 'Version.*' | cut -f2- -d:)
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch ${prefix}.CollectMultipleMetrics
+    touch ${prefix}.pdf
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        picard: \$(picard CollectMultipleMetrics --version 2>&1 | grep -o 'Version.*' | cut -f2- -d:)
+    END_VERSIONS
+   """
 }
