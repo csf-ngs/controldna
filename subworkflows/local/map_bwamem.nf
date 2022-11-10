@@ -1,12 +1,12 @@
-include { BWA_MEM                             } from '../../modules/nf-core/modules/bwa/mem/main'
-include { SAMTOOLS_INDEX                      } from '../../modules/nf-core/modules/samtools/index/main'
-include { SAMTOOLS_MERGE                      } from '../../modules/nf-core/modules/samtools/merge/main'
-include { SAMTOOLS_SORT                       } from '../../modules/nf-core/modules/samtools/sort/main'
+include { BWA_MEM                             } from '../../modules/nf-core/bwa/mem/main'
+include { SAMTOOLS_INDEX                      } from '../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_MERGE                      } from '../../modules/nf-core/samtools/merge/main'
+include { SAMTOOLS_SORT                       } from '../../modules/nf-core/samtools/sort/main'
 include { PICARD_MARKDUPLICATESWITHMATECIGAR  } from '../../modules/local/picardmarkduplicateswithmatecigar'
 include { SAMTOOLS_SORTNAME                   } from '../../modules/local/samtoolssortname'
 include { PICARD_SORTBAM                      } from '../../modules/local/picardsortbam'
 
-
+//TODO: switch to BWA MEM2
 workflow MAP_BWAMEM {
     take:
         reads         // channel: [ val(meta), [ reads ] ]

@@ -8,7 +8,8 @@ workflow TRIM_CUTADAPT {
 
     def trueseq_pe = "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
     def trueseq_sr = "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
- 
+    def nextera_pe = "-a CTGTCTCTTATACACATCT"
+
     take:
     reads         // channel: [ val(meta), [ reads ] ]
     skip_trimming // boolean: true/false

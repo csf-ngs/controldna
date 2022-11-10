@@ -35,7 +35,10 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
         $args \\
         I=$bam \\
         O=${prefix}.md.bam \\
-        M=${prefix}.MarkDuplicates.metrics.txt
+        M=${prefix}.MarkDuplicates.metrics.txt \\
+        UMI_METRICS=output_umi_metrics.txt
+
+\\UMI_TAG???
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
