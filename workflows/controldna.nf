@@ -58,6 +58,7 @@ include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
 include { MAP_BWAMEM    } from '../subworkflows/local/map_bwamem'
 include { BAM_DNA_QC    } from '../subworkflows/local/bam_dna_qc'
 include { SEQTK_SAMPLE  } from '../modules/local/subsample'
+include { SUBDIR        } from '../modules/local/subdir'
 
 /*
 ========================================================================================
@@ -156,8 +157,11 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.wgs.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.multiple.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.ccurve.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.c_curve.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.mosdepth_global.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.mosdepth_summary.collect{it[1]}.ifEmpty([]))
+
+    SUBDIR("stats", ch_multiqc_files.collect())
 
     MULTIQC (
         ch_multiqc_files.collect()
