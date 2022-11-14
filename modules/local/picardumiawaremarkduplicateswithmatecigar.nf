@@ -23,6 +23,7 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def avail_mem = 3
+    def umi = " --UMI_TAG_NAME "
     if (!task.memory) {
         log.info '[Picard UMIAwareMarkDuplicatesWithMateCigar] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
@@ -38,7 +39,7 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
         M=${prefix}.MarkDuplicates.metrics.txt \\
         UMI_METRICS=output_umi_metrics.txt
 
-\\UMI_TAG???
+
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

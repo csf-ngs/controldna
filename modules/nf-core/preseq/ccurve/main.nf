@@ -18,7 +18,7 @@ process PRESEQ_CCURVE {
 
     when:
     task.ext.when == null || task.ext.when
-
+   //added -B by IT20221111
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
@@ -27,6 +27,7 @@ process PRESEQ_CCURVE {
     preseq \\
         c_curve \\
         $args \\
+        -B \\
         $paired_end \\
         -output ${prefix}.c_curve.txt \\
         $bam

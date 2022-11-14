@@ -23,11 +23,12 @@ process PRESEQ_LCEXTRAP {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def paired_end = meta.single_end ? '' : '-pe'
+    //added -B by IT20221111
     """
     preseq \\
         lc_extrap \\
         $args \\
-        -B \\ #added by IT20221111
+        -B \\
         $paired_end \\
         -output ${prefix}.ccurve.txt \\
         $bam

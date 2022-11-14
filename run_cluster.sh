@@ -33,7 +33,7 @@ SUB=$5
 
 
 STUB="-stub-run"
-STUB=""
+#STUB=""
 
 ALIGN_WF_BASEDIR=/scratch/${USER}/ngs_alignments/control_dna/${PROJECT}
 

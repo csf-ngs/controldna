@@ -23,7 +23,13 @@ workflow MAP_BWAMEM {
     PICARD_SORTBAM(BWA_MEM.out.bam, "coordinate", "aligned")
     ch_versions = ch_versions.mix(PICARD_SORTBAM.out.versions.first())
 
-    PICARD_MARKDUPLICATESWITHMATECIGAR(PICARD_SORTBAM.out.bam)
+    PICARD_SORTBAM.out.bam.branch { m, r ->
+        umi: m.umi != ""
+        no_umi: true
+    }
+    .set { bam_umi }
+
+    PICARD_MARKDUPLICATESWITHMATECIGAR(bam_umi.no_umi)
     ch_versions = ch_versions.mix(PICARD_MARKDUPLICATESWITHMATECIGAR.out.versions.first())
  
     SAMTOOLS_SORT(PICARD_MARKDUPLICATESWITHMATECIGAR.out.bam)

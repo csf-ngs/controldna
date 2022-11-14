@@ -1,3 +1,5 @@
+///hackisch and probably wrong!!
+
 process ADDUMITOFASTQNAME {
     tag "$meta.id"
     label 'process_low'

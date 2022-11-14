@@ -9,15 +9,15 @@ workflow INPUT_CHECK {
     samplesheet // file: /path/to/samplesheet.csv
 
     main:
-    SAMPLESHEET_CHECK ( samplesheet )
-        .csv
+    Channel
+        .from( samplesheet )
         .splitCsv ( header:true, sep:',' )
         .map { create_fastq_channels(it) }
         .set { reads }
 
     emit:
     reads                                     // channel: [ val(meta), [ reads ] ]
-    versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
+    versions = "1.0" // channel: [ versions.yml ]
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
@@ -45,6 +45,9 @@ def create_fastq_channels(LinkedHashMap row) {
         meta.single_end = true
         array = [ meta, [ file(row.fastq_1) ] ]
     }
+    println(row)
+    println(meta)
+    //println(array)
     return array
 }
 
