@@ -57,7 +57,6 @@ include { INPUT_CHECK   } from '../subworkflows/local/input_check'
 include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
 include { MAP_BWAMEM    } from '../subworkflows/local/map_bwamem'
 include { BAM_DNA_QC    } from '../subworkflows/local/bam_dna_qc'
-include { SEQTK_SAMPLE  } from '../modules/local/subsample'
 include { SUBDIR        } from '../modules/local/subdir'
 
 /*
@@ -69,7 +68,7 @@ include { SUBDIR        } from '../modules/local/subdir'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { FASTQC                      } from '../modules/nf-core/fastqc/main'
+
 include { FASTQC as  FASTQC_TRIMMED   } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
@@ -96,24 +95,12 @@ workflow CONTROLDNA {
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 
-    SEQTK_SAMPLE (
-         INPUT_CHECK.out.reads, subsample_nr
-    )
-    ch_versions = ch_versions.mix(SEQTK_SAMPLE.out.versions.first())
-
-    //
-    // MODULE: Run FastQC
-    //
-    FASTQC (
-         SEQTK_SAMPLE.out.reads
-    )
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
     //SUBWORKFLOW trim cutadapt
     // todo false => param.skipTrim
     TRIM_CUTADAPT(
-        SEQTK_SAMPLE.out.reads, false
+        IUNPUT_CHECK.out.reads, false, subsample_nr
     )
     ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
 
