@@ -8,7 +8,7 @@ process ADD_UMI_TO_BAM {
         'quay.io/biocontainers/umi_tools:1.1.2--py38h4a8c8d9_0' }"
 
     input:
-    tuple val(meta), path(reads)
+    tuple val(meta), path(bam)
 
     output:
     tuple val(meta), path("*_umi*.fastq.gz"), emit: reads
@@ -20,15 +20,11 @@ process ADD_UMI_TO_BAM {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_umi"
-    def umi_file = meta.umi_file //TODO: maybe make to optional path input to get linked in
-    def pattern = meta.umi.replaceAll(".*:","")
 
     """
-    umi_tools extract --bc-pattern=${pattern} --stdin=${umi_file} --read2-in=${reads[0]} --stdout=dummy1 --read2-out=${prefix}_1.fastq.gz
-    umi_tools extract --bc-pattern=${pattern} --stdin=${umi_file} --read2-in=${reads[1]} --stdout=dummy2 --read2-out=${prefix}_2.fastq.gz
-
+    umi_to_bam.py $bam ${prefix}.bam
+    
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
             umitools: \$(umi_tools --version 2>&1 | sed 's/^.*UMI-tools version://; s/ *\$//')
@@ -39,8 +35,7 @@ process ADD_UMI_TO_BAM {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}_umi"
     """
-    touch ${prefix}_1.fastq.gz
-    touch ${prefix}_2.fastq.gz
+    touch ${prefix}.bam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

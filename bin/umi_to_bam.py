@@ -1,30 +1,36 @@
 #!/usr/bin/env python
 
 import sys, re
-from dataclasses import dataclass
-import click, unittest
+#import click
+import unittest
 import pysam
 
 
-@dataclass
-class TheClass():
-    input: str
-
 
 def extract_umi(readname: str) -> str:
+    rn = readname.split()[0]
+    umi = rn.split("_")[-1]
+    return umi
 
+def insert_umis(inputbam: str, outputbam: str):
+    input = pysam.AlignmentFile(inputbam, "rb")
+    output = pysam.AlignmentFile(outputbam, "wb", template=input)
+    for read in input.fetch():
+        rn = read.query_name
+        umi = extract_umi(rn)
+        read.set_tag("RX",umi) #--UMI_TAG_NAME 
+        output.write(read)
 
-samfile = pysam.AlignmentFile("ex1.bam", "rb")
-pairedreads = pysam.AlignmentFile("allpaired.bam", "wb", template=samfile)
-for read in samfile.fetch():
-    if read.is_paired:
-        pairedreads.write(read)
+    input.close()
+    output.close()
 
-@click.command()
-@click.option("--input", help="input")
-def run_cmd(input: str):
-    "runs a command"
-    pass
+#no click in umi_tools SINGULARITY
+#@click.command()
+#@click.option("--inputbam", help="input bam")
+#@click.option("--outputbam", help="output bam")
+#def run_cmd(inputbam: str, outputbam: str):
+#    "runs a command"
+#    insert_umis(inputbam, outputbam)
 
 
 
@@ -38,9 +44,9 @@ if __name__ == '__main__':
     print(f"version: {platform.python_version()}")
     if len(sys.argv) == 1:
         unittest.main(exit=False)
-        run_cmd(["--help"])
+        #run_cmd(["--help"])
     else:
-        run_cmd()
+        insert_umis(sys.argv[1], sys.argv[2])
 
 
 
