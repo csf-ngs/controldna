@@ -21,6 +21,7 @@ process SEQTK_SAMPLE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
+    def sample(readsfile, suffix) = "seqtk sample $args -2 $readsfile $sample_size | gzip --no-name > ${prefix}.${suffix}"
     if (meta.single_end) {
         if(sample_size == 0){
             """
@@ -35,13 +36,7 @@ process SEQTK_SAMPLE {
         } else {
 
         """
-        seqtk \\
-            sample \\
-            $args -2 \\
-            $reads \\
-            $sample_size \\
-            | gzip --no-name > ${prefix}.fastq.gz \\
-
+        ${sample(reads, ".fastq.gz")}
         cat <<-END_VERSIONS > versions.yml
         "${task.process}":
             seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
@@ -64,19 +59,8 @@ process SEQTK_SAMPLE {
             """
         } else {
         """
-        seqtk \\
-            sample \\
-            $args -2 \\
-            ${reads[0]} \\
-            $sample_size \\
-            | gzip --no-name > ${prefix}_1.fastq.gz \\
-
-        seqtk \\
-            sample \\
-            $args -2 \\
-            ${reads[1]} \\
-            $sample_size \\
-            | gzip --no-name > ${prefix}_2.fastq.gz \\
+        ${sample(reads[0], "_1.fastq.gz")}
+        ${sample(reads[1], "_2.fastq.gz")}
 
         cat <<-END_VERSIONS > versions.yml
         "${task.process}":
