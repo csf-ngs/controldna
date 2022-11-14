@@ -11,7 +11,7 @@ process ADD_UMI_TO_BAM {
     tuple val(meta), path(bam)
 
     output:
-    tuple val(meta), path("*_umi*.fastq.gz"), emit: reads
+    tuple val(meta), path("*_umi*bam"), emit: bam
     path "versions.yml"                , emit: versions
 //TODO: stats on UMI distribution histogram etc.. in after markduplicates
 //historgram 0, 1, 2 error distance.
