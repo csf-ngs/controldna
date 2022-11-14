@@ -100,7 +100,7 @@ workflow CONTROLDNA {
     //SUBWORKFLOW trim cutadapt
     // todo false => param.skipTrim
     TRIM_CUTADAPT(
-        IUNPUT_CHECK.out.reads, false, subsample_nr
+        INPUT_CHECK.out.reads, false, subsample_nr
     )
     ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
 
@@ -137,7 +137,7 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.fastqc.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.trim_log.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC_TRIMMED.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.dup_metrics.collect{it[1]}.ifEmpty([]))

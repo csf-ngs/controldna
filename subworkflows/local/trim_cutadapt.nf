@@ -1,7 +1,7 @@
-include { SEQTK_SAMPLE  } from '../modules/local/subsample'
+include { SEQTK_SAMPLE  } from '../../modules/local/subsample'
 include { CUTADAPT     } from '../../modules/local/cutadapt'
-include { UMI_PROCESS  } from '../umi_process'
-include { FASTQC                      } from '../../modules/nf-core/fastqc/main'
+include { UMI_PROCESS  } from './umi_process'
+include { FASTQC       } from '../../modules/nf-core/fastqc/main'
 
 workflow TRIM_CUTADAPT {
 
