@@ -15,7 +15,7 @@ def extract_umi(readname: str) -> str:
 def insert_umis(inputbam: str, outputbam: str):
     input = pysam.AlignmentFile(inputbam, "rb")
     output = pysam.AlignmentFile(outputbam, "wb", template=input)
-    for read in input.fetch():
+    for read in input.fetch(until_eof=True ):
         rn = read.query_name
         umi = extract_umi(rn)
         read.set_tag("RX",umi) #--UMI_TAG_NAME 

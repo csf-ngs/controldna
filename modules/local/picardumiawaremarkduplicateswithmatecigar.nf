@@ -24,6 +24,7 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def avail_mem = 3
     def umi = " --UMI_TAG_NAME "
+    def max_edit = meta.umi_edit_dist ?: 1
     if (!task.memory) {
         log.info '[Picard UMIAwareMarkDuplicatesWithMateCigar] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
@@ -34,10 +35,11 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
         -Xmx${avail_mem}g \\
         UmiAwareMarkDuplicatesWithMateCigar \\
         $args \\
+        MAX_EDIT_DISTANCE_TO_JOIN=${max_edit} \\
         I=$bam \\
         O=${prefix}.md.bam \\
         M=${prefix}.MarkDuplicates.metrics.txt \\
-        UMI_METRICS=output_umi_metrics.txt
+        UMI_METRICS=${prefix}.MD_umi.metrics.txt
 
 
 

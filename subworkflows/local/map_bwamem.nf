@@ -27,10 +27,11 @@ workflow MAP_BWAMEM {
     ch_versions = ch_versions.mix(PICARD_SORTBAM.out.versions.first())
 
     PICARD_SORTBAM.out.bam.branch { m, r ->
-        umi: m.umi != ""
+        umi: m.umi && m.umi != ""
         no_umi: true
     }
     .set { bam_umi }
+
 
     ADD_UMI_TO_BAM(bam_umi.umi)
     PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR(ADD_UMI_TO_BAM.out.bam)

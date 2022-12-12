@@ -13,8 +13,9 @@ workflow TRIM_CUTADAPT {
     main:
     ch_versions = Channel.empty()
     
+
     reads.branch { m, r ->
-        umi: m.umi != ""
+        umi: m.umi && m.umi != ""
         no_umi: true
     }
     .set { reads_umi }
@@ -23,6 +24,7 @@ workflow TRIM_CUTADAPT {
     ch_versions = ch_versions.mix(UMI_PROCESS.out.versions.first())
 
     umi_processed = reads_umi.no_umi.mix(UMI_PROCESS.out.reads)
+
 
     SEQTK_SAMPLE (
          umi_processed, subsample_nr
