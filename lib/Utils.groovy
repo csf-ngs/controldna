@@ -51,4 +51,16 @@ class Utils {
         }
    }
 
+   /**
+   * meta string if present else global number
+   *
+   **/
+   public static String subsample_number(meta_str, global_num){
+        if (meta_str) {
+            string_number(meta_str)
+        } else {
+            global_num
+        }
+   }
+
 }

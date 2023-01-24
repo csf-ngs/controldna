@@ -21,8 +21,11 @@ process SEQTK_SAMPLE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
+    def subsample_size = Utils.subsample_number(meta.subsample, sample_size)
+    
+
     if (meta.single_end) {
-        if(sample_size == 0){
+        if(subsample_size == 0){
             """
             cp $reads ${prefix}.fastq.gz
 
@@ -52,7 +55,7 @@ process SEQTK_SAMPLE {
         if (!(args ==~ /.*-s[0-9]+.*/)) {
             args += " -s100 "
         }
-        if(sample_size == 0){
+        if(subsample_size == 0){
             """
             cp ${reads[0]} ${prefix}_1.fastq.gz
             cp ${reads[1]} ${prefix}_2.fastq.gz
@@ -68,14 +71,14 @@ process SEQTK_SAMPLE {
             sample \\
             $args -2 \\
             ${reads[0]} \\
-            $sample_size \\
+            $subsample_size \\
             | gzip --no-name > ${prefix}_1.fastq.gz \\
 
         seqtk \\
             sample \\
             $args -2 \\
             ${reads[1]} \\
-            $sample_size \\
+            $subsample_size \\
             | gzip --no-name > ${prefix}_2.fastq.gz \\
 
         cat <<-END_VERSIONS > versions.yml
