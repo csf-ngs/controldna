@@ -1,6 +1,7 @@
 process SEQTK_SAMPLE {
     tag "$meta.id"
     label 'process_low'
+    label 'process_medium_memory'
 
     conda (params.enable_conda ? "bioconda::seqtk=1.3" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -9,7 +10,7 @@ process SEQTK_SAMPLE {
 
     input:
     tuple val(meta), path(reads)
-    val sample_size
+    val subsample_str
 
     output:
     tuple val(meta), path("*.fastq.gz"), emit: reads
@@ -21,7 +22,8 @@ process SEQTK_SAMPLE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
-    def subsample_size = Utils.subsample_number(meta.subsample, sample_size)
+    
+    def (fixed, subsample_size) = Utils.subsample_number(meta.subsample, subsample_str)
     
 
     if (meta.single_end) {
@@ -35,7 +37,7 @@ process SEQTK_SAMPLE {
             END_VERSIONS
             """
 
-        } else {
+        } else if (fixed == "random"){
 
         """
         seqtk \\
@@ -46,6 +48,15 @@ process SEQTK_SAMPLE {
             | gzip --no-name > ${prefix}.fastq.gz \\
 
         cat <<-END_VERSIONS > versions.yml
+        "${task.process}":
+            seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
+        END_VERSIONS
+        """
+        } else {
+        """
+        gunzip -c $reads | head -n ${subsample_size} | gzip --no-name > ${prefix}.fastq.gz
+
+                cat <<-END_VERSIONS > versions.yml
         "${task.process}":
             seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
         END_VERSIONS
@@ -65,7 +76,7 @@ process SEQTK_SAMPLE {
                     seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
             END_VERSIONS
             """
-        } else {
+        } else if(fixed == "random"){
         """
         seqtk \\
             sample \\
@@ -86,8 +97,19 @@ process SEQTK_SAMPLE {
             seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
         END_VERSIONS
         """
-      }
-   }
+        } else {
+        """
+        gunzip -c ${reads[0]} | head -n ${subsample_size} | gzip --no-name > ${prefix}_1.fastq.gz
+        gunzip -c ${reads[1]} | head -n ${subsample_size} | gzip --no-name > ${prefix}_2.fastq.gz
+
+        cat <<-END_VERSIONS > versions.yml
+        "${task.process}":
+            seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
+        END_VERSIONS
+        """
+        }
+    }
+   
 
    stub:
    def prefix = task.ext.prefix ?: "${meta.id}_subsample"

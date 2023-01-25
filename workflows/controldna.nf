@@ -33,7 +33,7 @@ if (anno_readme && file(anno_readme).exists()) {
 }
 
 def subsample_str = params.subsample ?: "0"
-def subsample_nr = Utils.string_number(subsample_str)
+
 
 /*
 ========================================================================================
@@ -100,7 +100,7 @@ workflow CONTROLDNA {
     //SUBWORKFLOW trim cutadapt
     // todo false => param.skipTrim
     TRIM_CUTADAPT(
-        INPUT_CHECK.out.reads, false, subsample_nr
+        INPUT_CHECK.out.reads, false, subsample_str
     )
     ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
 

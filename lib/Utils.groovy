@@ -38,16 +38,27 @@ class Utils {
         }
     }
 
-    public static int string_number(str_num){
-        if (str_num.isInteger()) {
-              return str_num as Integer
+    /**
+    *  fixed = "top ${fixed}" (*4 !!!)
+    *  sample = subsample
+    * 
+    **/
+    public static Tuple2<String,Integer> string_number(str_num){
+        def fixed = str_num.toLowerCase().endsWith("f")
+        def fr = fixed ? "fixed" : "sample"
+        def str_num_clean = fixed ? str_num.substring(0,str_num.length()-1)
+        if (str_num_clean.isInteger()) {
+              return new Tuple2(fr, str_num as Integer)
         } else {
-              def l = str_num.toLowerCase()
+              def count = 0
+              def l = str_num_clean.toLowerCase()
               if(l.endsWith("m")){
-                    return (l.replace("m","") as Integer) * 1000000
+                    count = (l.replace("m","") as Integer) * 1000000 
               } else if(l.endsWith("k")){
-                    return (l.replace("k","") as Integer) * 1000
+                    count = (l.replace("k","") as Integer) * 1000 
               }
+              count = fixed ? count * 4 : count
+              return new Tuple2(fr, count)
         }
    }
 
@@ -55,11 +66,11 @@ class Utils {
    * meta string if present else global number
    *
    **/
-   public static String subsample_number(meta_str, global_num){
-        if (meta_str) {
-            string_number(meta_str)
+   public static String subsample_number(meta_str_num, global_str_num){
+        if (meta_str_num) {
+            string_number(meta_str_num)
         } else {
-            global_num
+            string_number(global_str_num)
         }
    }
 
