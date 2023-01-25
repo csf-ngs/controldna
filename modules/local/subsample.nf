@@ -24,7 +24,6 @@ process SEQTK_SAMPLE {
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
     
     def (fixed, subsample_size) = Utils.subsample_number(meta.subsample, subsample_str)
-    
 
     if (meta.single_end) {
         if(subsample_size == 0){
@@ -99,6 +98,8 @@ process SEQTK_SAMPLE {
         """
         } else {
         """
+        ${fixed}
+
         gunzip -c ${reads[0]} | head -n ${subsample_size} | gzip --no-name > ${prefix}_1.fastq.gz
         gunzip -c ${reads[1]} | head -n ${subsample_size} | gzip --no-name > ${prefix}_2.fastq.gz
 

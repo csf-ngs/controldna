@@ -38,35 +38,39 @@ class Utils {
         }
     }
 
+
     /**
     *  fixed = "top ${fixed}" (*4 !!!)
     *  sample = subsample
-    * 
-    **/
-    public static Tuple2<String,Integer> string_number(str_num){
+    * String because of BigInteger
+    * easier alternative would have been automatic fixed > 100M
+    */
+    public static Tuple2<String,String> string_number(str_num){
         def fixed = str_num.toLowerCase().endsWith("f")
         def fr = fixed ? "fixed" : "sample"
-        def str_num_clean = fixed ? str_num.substring(0,str_num.length()-1)
+        def str_num_clean = fixed ? str_num.substring(0,str_num.length()-1) : str_num
         if (str_num_clean.isInteger()) {
               return new Tuple2(fr, str_num as Integer)
         } else {
               def count = 0
               def l = str_num_clean.toLowerCase()
               if(l.endsWith("m")){
-                    count = (l.replace("m","") as Integer) * 1000000 
+                    count = BigInteger.valueOf(l.replace("m","") as Integer).multiply(BigInteger.valueOf(1000000))
               } else if(l.endsWith("k")){
-                    count = (l.replace("k","") as Integer) * 1000 
+                    count = BigInteger.valueOf(l.replace("k","") as Integer).multiply(BigInteger.valueOf(1000))
               }
-              count = fixed ? count * 4 : count
+              count = fixed ? count.multiply(BigInteger.value(4)) * 4 : count
+              def cs = count.toString()
               return new Tuple2(fr, count)
         }
    }
+
 
    /**
    * meta string if present else global number
    *
    **/
-   public static String subsample_number(meta_str_num, global_str_num){
+   public static Tuple2<String,String> subsample_number(meta_str_num, global_str_num){
         if (meta_str_num) {
             string_number(meta_str_num)
         } else {
