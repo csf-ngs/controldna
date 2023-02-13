@@ -50,16 +50,16 @@ class Utils {
         def fr = fixed ? "fixed" : "sample"
         def str_num_clean = fixed ? str_num.substring(0,str_num.length()-1) : str_num
         if (str_num_clean.isInteger()) {
-              return new Tuple2(fr, str_num as Integer)
+              return new Tuple2(fr, str_num)
         } else {
-              def count = 0
+              def count = BigInteger.valueOf(0)
               def l = str_num_clean.toLowerCase()
               if(l.endsWith("m")){
                     count = BigInteger.valueOf(l.replace("m","") as Integer).multiply(BigInteger.valueOf(1000000))
               } else if(l.endsWith("k")){
                     count = BigInteger.valueOf(l.replace("k","") as Integer).multiply(BigInteger.valueOf(1000))
               }
-              count = fixed ? count.multiply(BigInteger.value(4)) * 4 : count
+              count = fixed ? count.multiply(BigInteger.valueOf(4)) : count
               def cs = count.toString()
               return new Tuple2(fr, count)
         }

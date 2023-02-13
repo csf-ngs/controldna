@@ -1,7 +1,8 @@
 process SEQTK_SAMPLE {
     tag "$meta.id"
-    label 'process_low'
+
     label 'process_medium_memory'
+    errorStrategy 'ignore'
 
     conda (params.enable_conda ? "bioconda::seqtk=1.3" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -23,10 +24,11 @@ process SEQTK_SAMPLE {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
     
+    //string because of bigint size
     def (fixed, subsample_size) = Utils.subsample_number(meta.subsample, subsample_str)
 
     if (meta.single_end) {
-        if(subsample_size == 0){
+        if(subsample_size == "0"){
             """
             cp $reads ${prefix}.fastq.gz
 
@@ -36,7 +38,7 @@ process SEQTK_SAMPLE {
             END_VERSIONS
             """
 
-        } else if (fixed == "random"){
+        } else if (fixed == "sample"){
 
         """
         seqtk \\
@@ -65,7 +67,7 @@ process SEQTK_SAMPLE {
         if (!(args ==~ /.*-s[0-9]+.*/)) {
             args += " -s100 "
         }
-        if(subsample_size == 0){
+        if(subsample_size == "0"){
             """
             cp ${reads[0]} ${prefix}_1.fastq.gz
             cp ${reads[1]} ${prefix}_2.fastq.gz
@@ -75,7 +77,7 @@ process SEQTK_SAMPLE {
                     seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
             END_VERSIONS
             """
-        } else if(fixed == "random"){
+        } else if(fixed == "sample"){
         """
         seqtk \\
             sample \\
@@ -98,7 +100,6 @@ process SEQTK_SAMPLE {
         """
         } else {
         """
-        ${fixed}
 
         gunzip -c ${reads[0]} | head -n ${subsample_size} | gzip --no-name > ${prefix}_1.fastq.gz
         gunzip -c ${reads[1]} | head -n ${subsample_size} | gzip --no-name > ${prefix}_2.fastq.gz
