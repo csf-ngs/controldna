@@ -22,10 +22,10 @@ process UMITOOLS_UMI_EXTRACT {
     def prefix = task.ext.prefix ?: "${meta.id}_umi"
     def umi_file = meta.umi_file //TODO: maybe make to optional path input to get linked in
     def pattern = meta.umi.replaceAll(".*:","")
-
+    def fq = "/users/ido.tamir/bin/fastq umi"
     """
-    umi_tools extract --bc-pattern=${pattern} --stdin=${umi_file} --read2-in=${reads[0]} --stdout=dummy1 --read2-out=${prefix}_1.fastq.gz
-    umi_tools extract --bc-pattern=${pattern} --stdin=${umi_file} --read2-in=${reads[1]} --stdout=dummy2 --read2-out=${prefix}_2.fastq.gz
+    ${fq} --umifile ${umi_file} --readfile ${reads[0]} --outfile ${prefix}_1.fastq.gz
+    ${fq} --umifile ${umi_file} --readfile ${reads[1]} --outfile ${prefix}_2.fastq.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

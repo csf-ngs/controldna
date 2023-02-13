@@ -23,7 +23,7 @@ process SEQTK_SAMPLE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
-    
+    def fq = "/users/ido.tamir/bin/fastq head"
     //string because of bigint size
     def (fixed, subsample_size) = Utils.subsample_number(meta.subsample, subsample_str)
 
@@ -55,7 +55,7 @@ process SEQTK_SAMPLE {
         """
         } else {
         """
-        gunzip -c $reads | head -n ${subsample_size} | gzip --no-name > ${prefix}.fastq.gz
+        ${fq} --inpath $reads --outpath ${prefix}.fastq.gz --snumber ${subsample_str}
 
                 cat <<-END_VERSIONS > versions.yml
         "${task.process}":
@@ -101,8 +101,8 @@ process SEQTK_SAMPLE {
         } else {
         """
 
-        gunzip -c ${reads[0]} | head -n ${subsample_size} | gzip --no-name > ${prefix}_1.fastq.gz
-        gunzip -c ${reads[1]} | head -n ${subsample_size} | gzip --no-name > ${prefix}_2.fastq.gz
+        ${fq} --inpath ${reads[0]} --outpath ${prefix}_1.fastq.gz --snumber ${subsample_str}
+        ${fq} --inpath ${reads[1]} --outpath ${prefix}_2.fastq.gz --snumber ${subsample_str}
 
         cat <<-END_VERSIONS > versions.yml
         "${task.process}":
