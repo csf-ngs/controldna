@@ -45,7 +45,7 @@ process SEQTK_SAMPLE {
             sample \\
             $args -2 \\
             $reads \\
-            $sample_size \\
+            $subsample_size \\
             | gzip --no-name > ${prefix}.fastq.gz \\
 
         cat <<-END_VERSIONS > versions.yml

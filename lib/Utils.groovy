@@ -59,7 +59,8 @@ class Utils {
               } else if(l.endsWith("k")){
                     count = BigInteger.valueOf(l.replace("k","") as Integer).multiply(BigInteger.valueOf(1000))
               }
-              count = fixed ? count.multiply(BigInteger.valueOf(4)) : count
+              //for htop: count = fixed ? count.multiply(BigInteger.valueOf(4)) : count
+              count = fixed ? str_num_clean : count
               def cs = count.toString()
               return new Tuple2(fr, count)
         }
