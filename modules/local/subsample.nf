@@ -55,7 +55,7 @@ process SEQTK_SAMPLE {
         """
         } else {
         """
-        ${fq} --inpath $reads --outpath ${prefix}.fastq.gz --snumber ${subsample_str}
+        ${fq} --inpath $reads --outpath ${prefix}.fastq.gz --snumber ${subsample_size}
 
                 cat <<-END_VERSIONS > versions.yml
         "${task.process}":
@@ -101,8 +101,8 @@ process SEQTK_SAMPLE {
         } else {
         """
 
-        ${fq} --inpath ${reads[0]} --outpath ${prefix}_1.fastq.gz --snumber ${subsample_str}
-        ${fq} --inpath ${reads[1]} --outpath ${prefix}_2.fastq.gz --snumber ${subsample_str}
+        ${fq} --inpath ${reads[0]} --outpath ${prefix}_1.fastq.gz --snumber ${subsample_size}
+        ${fq} --inpath ${reads[1]} --outpath ${prefix}_2.fastq.gz --snumber ${subsample_size}
 
         cat <<-END_VERSIONS > versions.yml
         "${task.process}":
