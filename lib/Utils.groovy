@@ -62,7 +62,8 @@ class Utils {
               //for htop: count = fixed ? count.multiply(BigInteger.valueOf(4)) : count
               count = fixed ? str_num_clean : count
               def cs = count.toString()
-              return new Tuple2(fr, count)
+              log.info("subsampling to: fixed:${fr} ${count} ${cs} [${str_num}]")
+              return new Tuple2(fr, cs)
         }
    }
 
