@@ -32,8 +32,9 @@ process PICARD_MARKDUPLICATESWITHMATECIGAR {
     picard \\
         -Xmx${avail_mem}g \\
         MarkDuplicatesWithMateCigar \\
+        OPTICAL_DUPLICATE_PIXEL_DISTANCE=2500 \\
         $args \\
-        MINIMUM_DISTANCE=350 \\
+        MINIMUM_DISTANCE=600 \\
         I=$bam \\
         O=${prefix}.md.bam \\
         M=${prefix}.MarkDuplicates.metrics.txt

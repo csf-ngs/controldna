@@ -32,6 +32,7 @@ process PICARD_MARKDUPLICATES {
     picard \\
         -Xmx${avail_mem}g \\
         MarkDuplicates \\
+        OPTICAL_DUPLICATE_PIXEL_DISTANCE=2500 \\
         $args \\
         I=$bam \\
         O=${prefix}.md.bam \\

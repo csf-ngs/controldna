@@ -18,7 +18,7 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
 
     when:
     task.ext.when == null || task.ext.when
-
+//No MINIMAL_DISTANCE like in  MarkDuplicatesWithMateCigar so I don't know if this is really MarkDuplicatesWithMateCigar or more like MarkDuplicates
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
@@ -36,6 +36,7 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
         UmiAwareMarkDuplicatesWithMateCigar \\
         $args \\
         MAX_EDIT_DISTANCE_TO_JOIN=${max_edit} \\
+        OPTICAL_DUPLICATE_PIXEL_DISTANCE=2500 \\
         I=$bam \\
         O=${prefix}.md.bam \\
         M=${prefix}.MarkDuplicates.metrics.txt \\

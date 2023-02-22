@@ -35,6 +35,9 @@ workflow MAP_BWAMEM {
 
     ADD_UMI_TO_BAM(bam_umi.umi)
     PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR(ADD_UMI_TO_BAM.out.bam)
+
+    
+
     ch_versions = ch_versions.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.versions.first())
 
     PICARD_MARKDUPLICATESWITHMATECIGAR(bam_umi.no_umi)
