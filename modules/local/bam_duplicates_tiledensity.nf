@@ -7,7 +7,7 @@ process BAM_DUPLICATES_TILEDENSITY {
     tuple val(meta), path(bam)
 
     output:
-    tuple val(meta), path("*.tiledensity.tab") , emit: tab
+    tuple val(meta), path("*tiledensity.tab") , emit: tab
     path "versions.yml"                        , emit: versions
 
     when:

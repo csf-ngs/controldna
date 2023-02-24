@@ -1,8 +1,6 @@
 
-* check MINIMUM_DISTANCE in picard markduplicates
-* check optical_ in picard markduplicates
-* add default markduplicates -> plot_tiles (tile, point) -> html 
-
+* MarkDuplicates.metrics.txt => duplicates html report
+* MarkDuplicates.metrics.txt => multiqc
 
 * preseq fails; I think the biocontainer was compiled without --enable-hts
   [github issue](https://github.com/smithlabcode/preseq/issues/59)
