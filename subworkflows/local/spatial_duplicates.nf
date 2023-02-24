@@ -1,4 +1,4 @@
-include { PICARD_MARKDUPLICATESWITHMATECIGAR  } from '../../modules/local/picardmarkduplicateswithmatecigar'
+include { PICARD_MARKDUPLICATES  } from '../../modules/local/picardmarkduplicates'
 include { BAM_DUPLICATES_TILEDENSITY  } from '../../modules/local/bam_duplicates_tiledensity'
 include { BAM_DUPLICATES_PLOT_TILEDENSITY  } from '../../modules/local/bam_duplicates_plot_tiledensity'
 
@@ -6,7 +6,6 @@ include { BAM_DUPLICATES_PLOT_TILEDENSITY  } from '../../modules/local/bam_dupli
 workflow SPATIAL_DUPLICATES {
     take:
         bams        // channel: [ val(meta), [ bam ] ]
-        genome
 
     main:
 

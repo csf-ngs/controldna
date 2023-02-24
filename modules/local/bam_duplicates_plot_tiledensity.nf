@@ -1,5 +1,5 @@
 process BAM_DUPLICATES_PLOT_TILEDENSITY {
-    tag "$meta.id"
+    tag "plottiles"
     label 'process_low'
     
     container "/groups/vbcf-ngs/misc/infra/singularity/amd64/pipeline/pipgen_latest.sif" //markdown, ggplot viridis, collectcontrolresults
@@ -27,7 +27,6 @@ process BAM_DUPLICATES_PLOT_TILEDENSITY {
     """
 
     stub:
-    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch duplications_tiles_mqc.json
     touch duplications_tiles.html
@@ -37,3 +36,4 @@ process BAM_DUPLICATES_PLOT_TILEDENSITY {
             collectcontrolresults: 0.1
     END_VERSIONS
     """
+}

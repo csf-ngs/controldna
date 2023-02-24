@@ -156,6 +156,11 @@ workflow CONTROLDNA {
     )
     multiqc_report = MULTIQC.out.report.toList()
     ch_versions    = ch_versions.mix(MULTIQC.out.versions)
+
+    if(params.reportdir){
+                
+    }
+
 }
 
 /*

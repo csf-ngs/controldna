@@ -67,6 +67,9 @@ class Utils {
         }
    }
 
+  // public static long str_num_int(str_num){
+  //      
+  // }
 
    /**
    * meta string if present else global number
@@ -80,4 +83,10 @@ class Utils {
         }
    }
 
+/**
+   public static String time_for_process(str_num, default){
+        if(strnum)
+
+   }
+**/
 }

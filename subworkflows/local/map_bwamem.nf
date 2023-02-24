@@ -7,7 +7,7 @@ include { PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR  } from '../../modules/loca
 include { SAMTOOLS_SORTNAME                   } from '../../modules/local/samtoolssortname'
 include { PICARD_SORTBAM                      } from '../../modules/local/picardsortbam'
 include { ADD_UMI_TO_BAM                      } from '../../modules/local/add_umi_to_bam'
-include { SPATIAL_DUPLICATES                  } from 'spatial_duplicates'
+include { SPATIAL_DUPLICATES                  } from './spatial_duplicates'
 
 //TODO: switch to BWA MEM2
 workflow MAP_BWAMEM {

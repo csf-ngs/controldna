@@ -36,4 +36,4 @@ process BAM_DUPLICATES_TILEDENSITY {
             fastq: \$(echo \$($fq --version 2>&1) | head -n 1)
     END_VERSIONS
     """
- 
+}
