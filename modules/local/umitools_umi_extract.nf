@@ -22,16 +22,15 @@ process UMITOOLS_UMI_EXTRACT {
     def prefix = task.ext.prefix ?: "${meta.id}_umi"
     def umi_file = meta.umi_file //TODO: maybe make to optional path input to get linked in
     def pattern = meta.umi.replaceAll(".*:","")
-    def fq = "/users/ido.tamir/bin/fastq umi"
+    def fq = "/groups/vbcf-ngs/bin/preprocessing/fastq umi"
     """
     ${fq} --umifile ${umi_file} --readfile ${reads[0]} --outfile ${prefix}_1.fastq.gz
     ${fq} --umifile ${umi_file} --readfile ${reads[1]} --outfile ${prefix}_2.fastq.gz
 
     cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-            umitools: \$(umi_tools --version 2>&1 | sed 's/^.*UMI-tools version://; s/ *\$//')
+       "${task.process}":
+            fastq: \$(echo \$($fq --version 2>&1) | head -n 1)
     END_VERSIONS
-
     """
 
     stub:
@@ -41,8 +40,8 @@ process UMITOOLS_UMI_EXTRACT {
     touch ${prefix}_2.fastq.gz
 
     cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-            umitools: \$(umi_tools --version 2>&1 | sed 's/^.*UMI-tools version://; s/ *\$//')
+       "${task.process}":
+            fastq: \$(echo \$($fq --version 2>&1) | head -n 1)
     END_VERSIONS
 
     """

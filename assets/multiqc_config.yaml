@@ -17,30 +17,63 @@ table_columns_visible:
 module_order:
     - fastqc:
         name: 'FastQC r1 (input)'
+        anchor: "input_fastqc_r1"
         info: 'This section of the report shows read1 FastQC results before adapter trimming.'
         path_filters:
             - '*input_1_fastqc.zip'
     - fastqc:
         name: 'FastQC r2 (input)'
+        anchor: "input_fastqc_r2"
         info: 'This section of the report shows read2 FastQC results before adapter trimming.'
         path_filters:
             - '*input_2_fastqc.zip'
     - cutadapt
     - fastqc:
         name: 'FastQC r1 (trimmed)'
+        anchor: "trimmed_fastqc_r1"
         info: 'This section of the report shows read1 FastQC results after adapter trimming.'
         path_filters:
             - '*trimmed_1_fastqc.zip'
     - fastqc:
         name: 'FastQC r2 (trimmed)'
+        anchor: "trimmed_fastqc_r2"
         info: 'This section of the report shows read2 FastQC results after adapter trimming.'
         path_filters:
             - '*trimmed_2_fastqc.zip'
     - picard
     - mosdepth
     - preseq
+    - custom_content:
+        order:
+            - tiles_dups_lines
+
+
+report_section_order:
+    input_fastqc_r1:
+        order: 1100
+    input_fastqc_r2:
+        order: 1050
+    cutadapt:
+        order: 1040
+    trimmed_fastqc_r1:
+        order: 900
+    trimmed_fastqc_r2:
+        order: 850
+    picard:
+        order: 840
+    mosdepth:
+        order: 830
+    preseq:
+        order: 820
+    preseq:
+        order: 810
+    tiles_dups_lines:
+        order: 700
 
 extra_fn_clean_exts:
     - '.umi_dedup'
     - '_val'
     - '.markdup'
+
+
+    tiles_dups_lines
