@@ -157,8 +157,13 @@ workflow CONTROLDNA {
     multiqc_report = MULTIQC.out.report.toList()
     ch_versions    = ch_versions.mix(MULTIQC.out.versions)
 
-    if(params.reportdir){
-                
+
+
+    include { REPORTDIR as REPORTDIR_MQC } from '../modules/local/reportdir'
+    if(params.reportdir && params.multiqc_title){
+       REPORTDIR(params.reportdir, multiqc_report.mix(multiqc_report.data).toList())
+       ch_report_data = MAP_BWAMEM.out.spatial_html.mix(MAP_BWAMEM.out.spatial_tabs).toList()
+       REPORTDIR(params.reportdir+"/"+params.multiqc_title+"_data", ch_report_data)
     }
 
 }
