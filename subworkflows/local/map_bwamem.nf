@@ -7,7 +7,7 @@ include { PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR  } from '../../modules/loca
 include { SAMTOOLS_SORTNAME                   } from '../../modules/local/samtoolssortname'
 include { PICARD_SORTBAM                      } from '../../modules/local/picardsortbam'
 include { ADD_UMI_TO_BAM                      } from '../../modules/local/add_umi_to_bam'
-
+include { SPATIAL_DUPLICATES                  } from 'spatial_duplicates'
 
 //TODO: switch to BWA MEM2
 workflow MAP_BWAMEM {
@@ -32,12 +32,11 @@ workflow MAP_BWAMEM {
     }
     .set { bam_umi }
 
+    SPATIAL_DUPLICATES(PICARD_SORTBAM.out.bam)
+    ch_versions = ch_versions.mix(SPATIAL_DUPLICATES.out.versions.first())
 
     ADD_UMI_TO_BAM(bam_umi.umi)
     PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR(ADD_UMI_TO_BAM.out.bam)
-
-    
-
     ch_versions = ch_versions.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.versions.first())
 
     PICARD_MARKDUPLICATESWITHMATECIGAR(bam_umi.no_umi)
@@ -58,5 +57,8 @@ workflow MAP_BWAMEM {
         bam         = SAMTOOLS_SORT.out.bam        //  channel: [ val(meta), bai ]
         bai         = SAMTOOLS_INDEX.out.bai       // channel: [ val(meta), bam ]
         dup_metrics = PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.metrics)
+        spatial_html = SPATIAL_DUPLICATES.out.report_html
+        spatial_lines_json = SPATIAL_DUPLICATES.out.lines_json
+        spatial_tabs = SPATIAL_DUPLICATES.out.tabs
         versions    = ch_versions
 }

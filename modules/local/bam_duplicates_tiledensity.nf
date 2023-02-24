@@ -18,7 +18,7 @@ process BAM_DUPLICATES_TILEDENSITY {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def bin="/groups/vbcf-ngs/bin/preprocessing/bam_pos"
      """
-       $bin  duplicates  --bampath ${bam} --outpath  ${prefix}_tiledensity.tab 
+       $bin  duplicates  --bampath ${bam} --outpath ${prefix}_tiledensity.tab --id ${meta.id}
 
        cat <<-END_VERSIONS > versions.yml
        "${task.process}":

@@ -5,27 +5,35 @@ process BAM_DUPLICATES_PLOT_TILEDENSITY {
     container "/groups/vbcf-ngs/misc/infra/singularity/amd64/pipeline/pipgen_latest.sif" //markdown, ggplot viridis, collectcontrolresults
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(tabs)
 
     output:
-    tuple val(meta), path("*.duplications_tiles_lines_mqc.json") , emit: json
-    tuple val(meta), path("*.duplications_tiles_report.html") , emit: html
-    tuple val(meta), path('*.log')          , emit: log
+    tuple val(meta), path("duplications_tiles_mqc.json") , emit: json
+    tuple val(meta), path("duplications_tiles.html") , emit: html
     path "versions.yml"                     , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def trueseq = "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA " + ( meta.single_end ? "" : " -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT" )
-    def nextera = "-a CTGTCTCTTATACACATCT " + ( meta.single_end ? "" : " -A CTGTCTCTTATACACATCT" )
+    def args = task.ext.args ?: ''
+    """
+       tile_density_report.R --outputbase duplications_tiles --outputdir \$(pwd)  --knitdir \$(pwd) --intermediates \$(pwd) \$(pwd) '*tab'
 
-    //default trueseq
-    def trim_string = trueseq
+       cat <<-END_VERSIONS > versions.yml
+       "${task.process}":
+            collectcontrolresults: 0.1
+       END_VERSIONS
+    """
 
-    if(meta.adapter){  
-        switch(meta.adapter.toLowerCase()) {            
-            case "trueseq":
-                trim_string = trueseq
- //make line graph json of means across swaths for multiqc
- //make complete html report collecting all samples with good plots separately
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch duplications_tiles_mqc.json
+    touch duplications_tiles.html
+
+    cat <<-END_VERSIONS > versions.yml
+       "${task.process}":
+            collectcontrolresults: 0.1
+    END_VERSIONS
+    """

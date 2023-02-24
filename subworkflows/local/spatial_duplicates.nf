@@ -24,7 +24,7 @@ workflow SPATIAL_DUPLICATES {
 
     emit:
         tabs        = BAM_DUPLICATES_TILEDENSITY.out.tab.toList()     // channel: [ val(meta), path("*.tiledensity.tab")  ]
-        lines_mqc   = BAM_DUPLICATES_PLOT_TILEDENSITY.out.tiles_mqc   //  channel: tiles.json 
-        report_html = BAM_DUPLICATES_PLOT_TILEDENSITY.out.report_html  // channel: [ report.html ]
+        lines_json   = BAM_DUPLICATES_PLOT_TILEDENSITY.out.json         //  channel: tiles.json 
+        report_html = BAM_DUPLICATES_PLOT_TILEDENSITY.out.html  // channel: [ report.html ]
         versions    = ch_versions
 }
