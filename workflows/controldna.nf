@@ -58,6 +58,7 @@ include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
 include { MAP_BWAMEM    } from '../subworkflows/local/map_bwamem'
 include { BAM_DNA_QC    } from '../subworkflows/local/bam_dna_qc'
 include { SUBDIR        } from '../modules/local/subdir'
+include { REPORTDIR     } from '../modules/local/reportdir'
 
 /*
 ========================================================================================
@@ -131,6 +132,7 @@ workflow CONTROLDNA {
     //
     workflow_summary    = WorkflowControldna.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
+ 
 
     ch_multiqc_files = Channel.empty()
     ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
@@ -154,16 +156,15 @@ workflow CONTROLDNA {
     MULTIQC (
         ch_multiqc_files.collect()
     )
-    multiqc_report = MULTIQC.out.report.toList()
+    ch_multiqc_report = MULTIQC.out.report
     ch_versions    = ch_versions.mix(MULTIQC.out.versions)
 
 
-
-    include { REPORTDIR as REPORTDIR_MQC } from '../modules/local/reportdir'
     if(params.reportdir && params.multiqc_title){
-       REPORTDIR(params.reportdir, multiqc_report.mix(multiqc_report.data).toList())
-       ch_report_data = MAP_BWAMEM.out.spatial_html.mix(MAP_BWAMEM.out.spatial_tabs).toList()
-       REPORTDIR(params.reportdir+"/"+params.multiqc_title+"_data", ch_report_data)
+       ch_report_mqc = ch_multiqc_report.mix(MULTIQC.out.data)
+       ch_report_data = MAP_BWAMEM.out.spatial_html.mix(MAP_BWAMEM.out.spatial_tabs.flatten())
+       ch_report = ch_report_mqc.mix(ch_report_data).toList()
+       REPORTDIR(params.reportdir+"/"+params.multiqc_title, ch_report)
     }
 
 }

@@ -14,9 +14,11 @@ process REPORTDIR {
     task.ext.when == null || task.ext.when
 
     script:
+    def today = new java.util.Date().format( 'yyyyMMdd' )
+    def outdir = "${reportdir}_${today}"
     """
-      mkdir -p ${reportdir}
-      cp -rf * ${reportdir} || true
+      mkdir -p ${outdir}
+      cp -rfL * ${outdir} || true
     """
 
 }

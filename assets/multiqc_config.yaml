@@ -75,5 +75,3 @@ extra_fn_clean_exts:
     - '_val'
     - '.markdup'
 
-
-    tiles_dups_lines
