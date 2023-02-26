@@ -19,6 +19,7 @@ process REPORTDIR {
     """
       mkdir -p ${outdir}
       cp -rfL * ${outdir} || true
+      touch SUCCESS
     """
 
 }
