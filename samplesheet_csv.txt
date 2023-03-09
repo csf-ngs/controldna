@@ -1,1 +1,1 @@
-sample,fastq_1,fastq_2,umi
+sample,fastq_1,fastq_2,umi,umi_file,strandedness,subsample
