@@ -9,12 +9,12 @@ workflow UMI_PROCESS {
     ch_versions = Channel.empty()
 
     reads.branch { m, r ->
-        r2: m.umi_file =~ /R2/
+        umi: m.umi_file =~ /fastq.gz/
         unknown: true 
     }
     .set { reads_umi }
   
-    UMITOOLS_UMI_EXTRACT(reads_umi.r2)
+    UMITOOLS_UMI_EXTRACT(reads_umi.umi)
     
 
     umi_log   = Channel.empty()
