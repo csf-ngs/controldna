@@ -23,7 +23,7 @@ process SEQTK_SAMPLE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
-    def fq = "/users/ido.tamir/bin/fastq head"
+    def fq = "/groups/vbcf-ngs/bin/preprocessing/fastq head"
     //string because of bigint size
     def (fixed, subsample_size) = Utils.subsample_number(meta.subsample, subsample_str)
 
