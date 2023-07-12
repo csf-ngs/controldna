@@ -31,8 +31,8 @@ def create_fastq_channels(LinkedHashMap row) {
     if (!file(row.fastq_1).exists()) {
         exit 1, "ERROR: Please check input samplesheet -> Read 1 FastQ file does not exist!\n${row.fastq_1}"
     } else {
-        rg = extract_rg(row.fastq_1)
-        meta.read_group = rg
+        rg = meta.id//extract_rg(row.fastq_1) does not work with aviti
+        meta.read_group = "@RG\tID:${$meta.id}\tSM:${$meta.id}\tLB:${$meta.id}\tPL:ILLUMINA"
     }
     if (row.fastq_2 != null) {
         meta.single_end = false
