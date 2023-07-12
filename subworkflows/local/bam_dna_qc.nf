@@ -4,6 +4,8 @@ include { SAMTOOLS_NOSUPPLEMENTARY         } from '../../modules/local/samtoolsn
 include { PRESEQ_LCEXTRAP                  } from '../../modules/nf-core/preseq/lcextrap/main'
 include { PRESEQ_CCURVE                    } from '../../modules/nf-core/preseq/ccurve/main'
 include { MOSDEPTH                         } from '../../modules/nf-core/mosdepth/main'
+include { GATK4_BASERECALIBRATOR           } from '../../modules/nf-core/gatk4/baserecalibrator/main'
+
 
 workflow BAM_DNA_QC {
     take:
@@ -27,6 +29,13 @@ workflow BAM_DNA_QC {
       
       MOSDEPTH(m_bam_bai)
 
+      GATK_BASE = "/resources/references/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/GATKBundle/"
+      ch_known_sites = Channel.fromPath( ["${GATK_BASE}/dbsnp_146.hg38.vcf.gz","${GATK_BASE}/beta/Homo_sapiens_assembly38.known_indels.vcf.gz","${GATK_BASE}/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"] )
+
+      GATK4_BASERECALIBRATOR(m_bam_bai, fasta, ch_known_sites.toList(), "")
+      ch_versions = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first())
+     
+
       PICARD_COLLECTMULTIPLEMETRICS(bam, fasta)
       ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first(),MOSDEPTH.out.versions.first())
     
@@ -47,6 +56,7 @@ workflow BAM_DNA_QC {
         c_curve           = PRESEQ_CCURVE.out.c_curve                      // channel: [ val(meta), met ]
         mosdepth_summary  = MOSDEPTH.out.summary_txt                        // channel: [ val(meta), met ]
         mosdepth_global   = MOSDEPTH.out.global_txt                        // channel: [ val(meta), met ]
+        calibration_tables = GATK4_BASERECALIBRATOR.out.calibration_tables // channel: [ val(meta), met ]
         versions     = ch_versions
   
 }

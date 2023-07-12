@@ -18,9 +18,12 @@
 ##SBATCH --qos=long
 ##SBATCH --time=8-00:00:00
 
+## commands specific for CBE
+## on other compute environments you might have to use other commands to have nextflow available
 ml purge &> /dev/null
-ml git/2.19.1-gcccore-7.3.0-nodocs
-ml nextflow/21.10.6
+ml build-env/f2022
+ml git/2.33.1-gcccore-11.2.0-nodocs
+ml nextflow/22.10.7
 
 CALLDIR=$(pwd)
 
