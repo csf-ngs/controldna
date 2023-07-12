@@ -21,11 +21,11 @@ process UMITOOLS_UMI_EXTRACT {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_umi"
     def umi_file = meta.umi_file //TODO: maybe make to optional path input to get linked in
-    def pattern = meta.umi.replaceAll(".*:","")
+    def pattern = meta.umi
     def fq = "/groups/vbcf-ngs/bin/preprocessing/fastq umi"
     """
-    ${fq} --umifile ${umi_file} --readfile ${reads[0]} --outfile ${prefix}_1.fastq.gz
-    ${fq} --umifile ${umi_file} --readfile ${reads[1]} --outfile ${prefix}_2.fastq.gz
+    ${fq} --umifile ${umi_file} --readfile ${reads[0]} --outfile ${prefix}_1.fastq.gz --pattern ${pattern}
+    ${fq} --umifile ${umi_file} --readfile ${reads[1]} --outfile ${prefix}_2.fastq.gz --pattern ${pattern}
 
     cat <<-END_VERSIONS > versions.yml
        "${task.process}":
