@@ -28,7 +28,7 @@ workflow RECALIBRATE {
 
     GBC(GATK4_APPLYBQSR.out.bam, fasta, ch_known_sites.toList(), "_recalibrated")
 
-    ch_calibration_tables = GBU.out.table.mix(GBC.out.table)
+    ch_calibration_tables = GBU.out.calibration_table.mix(GBC.out.calibration_table)
 
     emit:
         calibration_tables = ch_calibration_tables

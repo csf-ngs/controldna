@@ -18,7 +18,7 @@ process GATK4_BASERECALIBRATOR {
 
     output:
     tuple val(meta), path(input), path(input_index), path("*.table"), emit: bam_table
-    path("*.table"), emit: table
+    path("*.table"), emit: calibration_table
     path "versions.yml"             , emit: versions
 
     when:

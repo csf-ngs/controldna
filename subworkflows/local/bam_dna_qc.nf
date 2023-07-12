@@ -56,7 +56,7 @@ workflow BAM_DNA_QC {
         c_curve           = PRESEQ_CCURVE.out.c_curve                      // channel: [ val(meta), met ]
         mosdepth_summary  = MOSDEPTH.out.summary_txt                        // channel: [ val(meta), met ]
         mosdepth_global   = MOSDEPTH.out.global_txt                        // channel: [ val(meta), met ]
-        calibration_tables = GATK4_BASERECALIBRATOR.out.calibration_tables // channel: [ val(meta), met ]
+        calibration_tables = GATK4_BASERECALIBRATOR.out.calibration_table // channel: [ val(meta), met ]
         versions     = ch_versions
   
 }
