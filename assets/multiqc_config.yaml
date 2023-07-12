@@ -43,6 +43,7 @@ module_order:
     - picard
     - mosdepth
     - preseq
+    - gatk
     - custom_content:
         order:
             - tiles_dups_lines
@@ -67,6 +68,8 @@ report_section_order:
         order: 820
     preseq:
         order: 810
+    gatk:
+        order: 805
     tiles_dups_lines:
         order: 700
 
@@ -74,4 +77,4 @@ extra_fn_clean_exts:
     - '.umi_dedup'
     - '_val'
     - '.markdup'
-
+    - '.table'
