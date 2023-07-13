@@ -77,4 +77,4 @@ extra_fn_clean_exts:
     - '.umi_dedup'
     - '_val'
     - '.markdup'
-    - '.table'
+    - '.bqsr_table'

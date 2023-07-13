@@ -10,23 +10,22 @@ process GATK4_BASERECALIBRATOR {
     input:
     tuple val(meta), path(input), path(input_index)//, path(intervals)
     path  fasta
-    //path  fai
-    //path  dict
+    path  fai
+    path  dict
     path  known_sites
-    //path  known_sites_tbi
-    val stage
+    path  known_sites_tbi
 
     output:
-    tuple val(meta), path(input), path(input_index), path("*.table"), emit: bam_table
-    path("*.table"), emit: calibration_table
-    path "versions.yml"             , emit: versions
+    tuple val(meta), path(input), path(input_index), path("*.bqsr_table"), emit: bam_table
+    path("*.bqsr_table"), emit: calibration_table
+    path "versions.yml" , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}${stage}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     def interval_command = ""//intervals ? "--intervals $intervals" : ""
     def sites_command = known_sites.collect{"--known-sites $it"}.join(' ')
 
@@ -39,7 +38,7 @@ process GATK4_BASERECALIBRATOR {
     """
     gatk --java-options "-Xmx${avail_mem}M" BaseRecalibrator  \\
         --input $input \\
-        --output ${prefix}.table \\
+        --output ${prefix}.bqsr_table \\
         --reference $fasta \\
         $interval_command \\
         $sites_command \\

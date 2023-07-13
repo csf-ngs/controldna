@@ -19,6 +19,8 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 
 def bwa_index = params.genome ? params.genomes[ params.genome ].bwa ?: false : false
 def fasta = params.genome ? params.genomes[ params.genome ].fasta : ""
+def fasta_fai = "${fasta}.fai"
+def fasta_dict = "${fasta.replaceAll("fa\$","")}dict"
 if(bwa_index == false){
     log.error("no valid bwa index found for genome build: ${params.genome}")
     System.exit(1)
@@ -118,7 +120,7 @@ workflow CONTROLDNA {
     ch_versions = ch_versions.mix(MAP_BWAMEM.out.versions.first())
 
     BAM_DNA_QC(
-        MAP_BWAMEM.out.bam_bai, fasta
+        MAP_BWAMEM.out.bam_bai, fasta, fasta_fai, fasta_dict
     )
     ch_versions = ch_versions.mix(BAM_DNA_QC.out.versions.first())
 
@@ -149,7 +151,7 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.c_curve.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.mosdepth_global.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.mosdepth_summary.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.calibration_tables.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.calibration_tables) //.collect{it[1]}.ifEmpty([]))
     SUBDIR("stats", ch_multiqc_files.collect())
 
     MULTIQC (
