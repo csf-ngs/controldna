@@ -42,7 +42,7 @@ process GATK_REALIGNERTARGETCREATOR {
         -nt ${task.cpus} \\
         -I ${input} \\
         -R ${fasta} \\
-        -o ${prefix}.intervals \\
+        -o ${prefix}.realigner.intervals \\
         ${known} \\
         $args
 
