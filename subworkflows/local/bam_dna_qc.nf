@@ -5,7 +5,8 @@ include { PRESEQ_LCEXTRAP                  } from '../../modules/nf-core/preseq/
 include { PRESEQ_CCURVE                    } from '../../modules/nf-core/preseq/ccurve/main'
 include { MOSDEPTH                         } from '../../modules/nf-core/mosdepth/main'
 include { GATK4_BASERECALIBRATOR           } from '../../modules/nf-core/gatk4/baserecalibrator/main'
-
+include { GATK_INDELREALIGNER              } from '../../modules/nf-core/gatk/indelrealigner/main'
+include { GATK_REALIGNERTARGETCREATOR      } from '../../modules/nf-core/gatk/realignertargetcreator/main'
 
 workflow BAM_DNA_QC {
     take:
@@ -36,7 +37,13 @@ workflow BAM_DNA_QC {
       ch_known_sites = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}"} )
       ch_known_sites_index =  Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}.tbi"} )
       
-      GATK4_BASERECALIBRATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
+      GATK_REALIGNERTARGETCREATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList())
+      ch_versions = ch_versions.mix(GATK_REALIGNERTARGETCREATOR.out.versions.first())
+
+      GATK_INDELREALIGNER(GATK_REALIGNERTARGETCREATOR.out.intervals, , fasta, fasta_fai, fasta_dict, ch_known_sites.toList())
+      ch_versions = ch_versions.mix(GATK_INDELREALIGNER.out.versions.first())
+
+      GATK4_BASERECALIBRATOR(GATK_INDELREALIGNER.out.bam, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
       ch_versions = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first())
      
 

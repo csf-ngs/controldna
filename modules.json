@@ -33,6 +33,20 @@
                             "modules"
                         ]
                     },
+                    "gatk/indelrealigner": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
+                    "gatk/realignertargetcreator": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
                     "gatk4/applybqsr": {
                         "branch": "master",
                         "git_sha": "240937a2a9c30298110753292be041188891f2cb",
