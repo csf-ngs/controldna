@@ -24,7 +24,7 @@ process GATK_INDELREALIGNER {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}_indelrealigned"
     def known = known_vcf.collect{ k -> "--known ${k}"}.join(' ')
 
     if ("$bam" == "${prefix}.bam") error "Input and output names are the same, set prefix in module configuration to disambiguate!"
