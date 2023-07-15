@@ -16,7 +16,7 @@ process GATK_REALIGNERTARGETCREATOR {
     path known_vcf_tbi
 
     output:
-    tuple val(meta), path(input), path(index), path("*_intervals"), emit: intervals
+    tuple val(meta), path(input), path(index), path("*.intervals"), emit: intervals
     path "versions.yml"                 , emit: versions
 
     when:
@@ -42,7 +42,7 @@ process GATK_REALIGNERTARGETCREATOR {
         -nt ${task.cpus} \\
         -I ${input} \\
         -R ${fasta} \\
-        -o ${prefix}.realigner_intervals \\
+        -o ${prefix}_realigner.intervals \\
         ${known} \\
         $args
 
