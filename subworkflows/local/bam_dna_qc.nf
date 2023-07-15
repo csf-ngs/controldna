@@ -37,10 +37,10 @@ workflow BAM_DNA_QC {
       ch_known_sites = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}"} )
       ch_known_sites_index =  Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}.tbi"} )
       
-      GATK_REALIGNERTARGETCREATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList())
+      GATK_REALIGNERTARGETCREATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
       ch_versions = ch_versions.mix(GATK_REALIGNERTARGETCREATOR.out.versions.first())
 
-      GATK_INDELREALIGNER(GATK_REALIGNERTARGETCREATOR.out.intervals, , fasta, fasta_fai, fasta_dict, ch_known_sites.toList())
+      GATK_INDELREALIGNER(GATK_REALIGNERTARGETCREATOR.out.intervals, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
       ch_versions = ch_versions.mix(GATK_INDELREALIGNER.out.versions.first())
 
       GATK4_BASERECALIBRATOR(GATK_INDELREALIGNER.out.bam, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())

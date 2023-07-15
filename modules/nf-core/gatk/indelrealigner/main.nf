@@ -13,6 +13,7 @@ process GATK_INDELREALIGNER {
     path(fai)
     path(dict)
     path(known_vcf)
+    path(known_vcf_tbi)
 
     output:
     tuple val(meta), path("*.bam"), path("*.bai"), emit: bam

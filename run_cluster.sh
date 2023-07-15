@@ -51,7 +51,7 @@ export NXF_OPTS='-Xms2g -Xmx8g'
 mkdir -p ${ALIGN_WF_BASEDIR}
 cd ${ALIGN_WF_BASEDIR}
 
-REPORT=/groups/vbcf-ngs/misc/reports/other/dna
+REPORT=/groups/vbcf-ngs/misc/reports/other/dna_indel
 
 nextflow run ~/work/pipelines/nf-core-controldna --input ${SAMPLES} --genome ${GENOME} --multiqc_title ${TITLE} --subsample ${SUB} --reportdir $REPORT -resume -profile cbe $STUB
 
