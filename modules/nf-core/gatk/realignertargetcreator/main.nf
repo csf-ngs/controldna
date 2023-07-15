@@ -16,7 +16,7 @@ process GATK_REALIGNERTARGETCREATOR {
     path known_vcf_tbi
 
     output:
-    tuple val(meta), path("*.bam"), path("*.bai"), path("*.intervals"), emit: intervals
+    tuple val(meta), path(input), path(index), path("*.intervals"), emit: intervals
     path "versions.yml"                 , emit: versions
 
     when:
@@ -24,9 +24,9 @@ process GATK_REALIGNERTARGETCREATOR {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}_realigntargetcreator"
-    def known = known_vcf ? "-known ${known_vcf}" : ""
-    if ("$input" == "${prefix}.bam") error "Input and output names are the same, set prefix in module configuration to disambiguate!"
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def known = known_vcf.collect{ k -> "--known ${k}"}.join(' ')
+    //if ("$input" == "${prefix}.bam") error "Input and output names are the same, set prefix in module configuration to disambiguate!"
 
     def avail_mem = 3072
     if (!task.memory) {
