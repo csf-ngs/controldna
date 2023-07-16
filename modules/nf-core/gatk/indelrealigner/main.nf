@@ -36,6 +36,8 @@ process GATK_INDELREALIGNER {
         avail_mem = (task.memory.mega*0.8).intValue()
     }
 
+    //lots of filters for malformed data:  --filter_bases_not_stored --filter_mismatching_base_and_quals --filter_reads_with_N_cigar 
+
     """
     gatk3 \\
         -Xmx${avail_mem}M \\
@@ -43,6 +45,7 @@ process GATK_INDELREALIGNER {
         -R ${fasta} \\
         -I ${bam} \\
         --targetIntervals ${intervals} \\
+        --filter_bases_not_stored --filter_mismatching_base_and_quals --filter_reads_with_N_cigar \\
         ${known} \\
         -o ${prefix}.bam \\
         $args
