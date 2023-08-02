@@ -32,10 +32,13 @@ workflow BAM_DNA_QC {
       
       MOSDEPTH(m_bam_bai)
 
-      KNOWN_FILES = ["dbsnp_146.hg38.vcf.gz", "beta/Homo_sapiens_assembly38.known_indels.vcf.gz", "Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"]
-      GATK_BASE = "/resources/references/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/GATKBundle/"
-      ch_known_sites = Channel.empty() //Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}"} )
-      ch_known_sites_index =  Channel.empty() //Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}.tbi"} )
+      //KNOWN_FILES = ["dbsnp_146.hg38.vcf.gz", "beta/Homo_sapiens_assembly38.known_indels.vcf.gz", "Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"]
+      //GATK_BASE = "/resources/references/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/GATKBundle/"
+      KNOWN_FILES = ["phix.vcf.gz"]
+      GATK_BASE = "/users/ido.tamir/work/pipelines/nf-core-controldna/resources"
+
+      ch_known_sites = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}"} )
+      ch_known_sites_index = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}.tbi"} )
       
       GATK_REALIGNERTARGETCREATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
       ch_versions = ch_versions.mix(GATK_REALIGNERTARGETCREATOR.out.versions.first())
