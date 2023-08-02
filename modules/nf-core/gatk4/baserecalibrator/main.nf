@@ -27,7 +27,7 @@ process GATK4_BASERECALIBRATOR {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def interval_command = ""//intervals ? "--intervals $intervals" : ""
-    def sites_command = known_sites.collect{"--known-sites $it"}.join(' ')
+    def sites_command = known_sites.size > 0 ? known_sites.collect{"--known-sites $it"}.join(' ') : ""
 
     def avail_mem = 3072
     if (!task.memory) {

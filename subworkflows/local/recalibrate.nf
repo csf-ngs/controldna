@@ -15,7 +15,7 @@ workflow RECALIBRATE {
     ch_versions       = Channel.empty()
 
     GATK_BASE = "/resources/references/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/GATKBundle/"
-    ch_known_sites = Channel.fromPath( ["${GATK_BASE}/dbsnp_146.hg38.vcf.gz","${GATK_BASE}/beta/Homo_sapiens_assembly38.known_indels.vcf.gz","${GATK_BASE}/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"] )
+    ch_known_sites = Channel.empty() // Channel.fromPath( ["${GATK_BASE}/dbsnp_146.hg38.vcf.gz","${GATK_BASE}/beta/Homo_sapiens_assembly38.known_indels.vcf.gz","${GATK_BASE}/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"] )
 
     GBU(bams, fasta, ch_known_sites.toList())//, "_uncalibrated")
     ch_versions = ch_versions.mix(GBU.out.versions.first())
