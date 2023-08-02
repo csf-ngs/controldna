@@ -1,0 +1,5 @@
+sample,fastq_1,fastq_2,umi,umi_file,strandedness,subsample
+Adept_CB1_10M,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003_phix/Samples/Adept_CB1/Adept_CB1_R1.fastq.gz,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003_phix/Samples/Adept_CB1/Adept_CB1_R2.fastq.gz,,,,10M
+Adept_CB2_10M,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003_phix/Samples/Adept_CB2/Adept_CB2_R1.fastq.gz,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003_phix/Samples/Adept_CB2/Adept_CB2_R2.fastq.gz,,,,10M
+Adept_CB3_10M,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003_phix/Samples/Adept_CB3/Adept_CB3_R1.fastq.gz,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003_phix/Samples/Adept_CB3/Adept_CB3_R2.fastq.gz,,,,10M
+Adept_CB4_10M,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003_phix/Samples/Adept_CB4/Adept_CB4_R1.fastq.gz,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003_phix/Samples/Adept_CB4/Adept_CB4_R2.fastq.gz,,,,10M

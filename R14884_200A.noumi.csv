@@ -1,0 +1,8 @@
+sample,fastq_1,fastq_2,umi,umi_file,strandedness,subsample
+220304_200MI,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220304/220304_S1_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220304/220304_S1_L001_R3_001.fastq.gz,,,,200Mf
+220305_200MI,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220305/220305_S2_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220305/220305_S2_L001_R3_001.fastq.gz,,,,200Mf
+220306_200MI,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220306/220306_S3_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220306/220306_S3_L001_R3_001.fastq.gz,,,,200Mf
+220307_200MI,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220307/220307_S4_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220307/220307_S4_L001_R3_001.fastq.gz,,,,200Mf
+220308_200MI,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220308/220308_S5_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220308/220308_S5_L001_R3_001.fastq.gz,,,,200Mf
+220309_200MI,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220309/220309_S6_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/dna/H32WKDSX5_1_R14884_20230209/demultiplexed/220309/220309_S6_L001_R3_001.fastq.gz,,,,200Mf
+220304_200MA,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003/Samples/220304/220304_R1.fastq.gz,/scratch/csfs/ido/tmp/lexogen/aviti/results_AV0003/Samples/220304/220304_R2.fastq.gz,,,,200Mf

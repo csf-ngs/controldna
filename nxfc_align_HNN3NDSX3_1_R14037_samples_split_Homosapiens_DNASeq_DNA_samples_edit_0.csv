@@ -1,0 +1,11 @@
+sample,fastq_1,fastq_2,umi,umi_file,strandedness,umi_edit_dist
+204993,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/204993/204993_S47_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/204993/204993_S47_L001_R2_001.fastq.gz,,,unstranded,0
+204994,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/204994/204994_S48_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/204994/204994_S48_L001_R2_001.fastq.gz,,,unstranded,0
+204999,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/204999/204999_S3_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/204999/204999_S3_L001_R3_001.fastq.gz,R2:NNNNNNNNNNN,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/204999/204999_S3_L001_R2_001.fastq.gz,unstranded,0
+205000,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/205000/205000_S4_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/205000/205000_S4_L001_R3_001.fastq.gz,R2:NNNNNNNNNNN,/scratch/csfs/ido/tmp/vova/dna/HNN3NDSX3_1_R14037_20220820/demultiplexed/205000/205000_S4_L001_R2_001.fastq.gz,unstranded,0
+NF-PCR1,/scratch/csfs/ido/tmp/illumina/NA12878-Rep-6_S6_L004_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12878-Rep-6_S6_L004_R2_001.fastq.gz,,,unstranded,0
+NF-PCR2,/scratch/csfs/ido/tmp/illumina/NA12891-Rep-2_S10_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12891-Rep-2_S10_L001_R2_001.fastq.gz,,,unstranded,0
+NF-PCR3,/scratch/csfs/ido/tmp/illumina/NA12892-Rep-1_S17_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12892-Rep-1_S17_L001_R2_001.fastq.gz,,,unstranded,0
+Free-1,/scratch/csfs/ido/tmp/illumina/NA12878-190515228A-v1-450-Rep21_S21_L003_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12878-190515228A-v1-450-Rep21_S21_L003_R2_001.fastq.gz,,,unstranded,0
+Free-2,/scratch/csfs/ido/tmp/illumina/NA12878-200304612B-v15-450-Rep3_S3_L002_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12878-200304612B-v15-450-Rep3_S3_L002_R2_001.fastq.gz,,,unstranded,0
+Free-3,/scratch/csfs/ido/tmp/illumina/NA12878-200304612B-v15-450-Rep6_S6_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12878-200304612B-v15-450-Rep6_S6_L001_R2_001.fastq.gz,,,unstranded,0

@@ -1,0 +1,11 @@
+group,replicate,fastq_1,fastq_2,strandedness
+208788,1,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208788/208788_S6_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208788/208788_S6_L001_R2_001.fastq.gz,unstranded
+208789,1,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208789/208789_S7_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208789/208789_S7_L001_R2_001.fastq.gz,unstranded
+208790,1,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208790/208790_S8_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208790/208790_S8_L001_R2_001.fastq.gz,unstranded
+208791,1,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208791/208791_S9_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208791/208791_S9_L001_R2_001.fastq.gz,unstranded
+208792,1,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208792/208792_S10_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208792/208792_S10_L001_R2_001.fastq.gz,unstranded
+208793,1,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208793/208793_S11_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208793/208793_S11_L001_R2_001.fastq.gz,unstranded
+208794,1,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208794/208794_S12_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/vova/H32YLDSX5_1_R14279_20221017/demultiplexed/208794/208794_S12_L001_R2_001.fastq.gz,unstranded
+NF-PCR1,1,/scratch/csfs/ido/tmp/illumina/NA12878-Rep-6_S6_L004_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12878-Rep-6_S6_L004_R2_001.fastq.gz,unstranded
+NF-PCR2,1,/scratch/csfs/ido/tmp/illumina/NA12891-Rep-2_S10_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12891-Rep-2_S10_L001_R2_001.fastq.gz,unstranded
+NF-PCR3,1,/scratch/csfs/ido/tmp/illumina/NA12892-Rep-1_S17_L001_R1_001.fastq.gz,/scratch/csfs/ido/tmp/illumina/NA12892-Rep-1_S17_L001_R2_001.fastq.gz,unstranded
