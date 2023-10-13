@@ -40,15 +40,18 @@ workflow BAM_DNA_QC {
       ch_known_sites = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}"} )
       ch_known_sites_index = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}.tbi"} )
       
-      //realigning -> baserecalibartion
-      //old workflow, not really necessary, just to make sure 
-      GATK_REALIGNERTARGETCREATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
-      ch_versions = ch_versions.mix(GATK_REALIGNERTARGETCREATOR.out.versions.first())
+      /** realigning -> baserecalibartion
+      //old workflow, not really necessary, takes a long time, does not improve anything
+      //GATK_REALIGNERTARGETCREATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
+      //ch_versions = ch_versions.mix(GATK_REALIGNERTARGETCREATOR.out.versions.first())
 
-      GATK_INDELREALIGNER(GATK_REALIGNERTARGETCREATOR.out.intervals, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
-      ch_versions = ch_versions.mix(GATK_INDELREALIGNER.out.versions.first())
+      //GATK_INDELREALIGNER(GATK_REALIGNERTARGETCREATOR.out.intervals, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
+      //ch_versions = ch_versions.mix(GATK_INDELREALIGNER.out.versions.first())
 
-      GATK4_BASERECALIBRATOR(GATK_INDELREALIGNER.out.bam, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
+      //GATK4_BASERECALIBRATOR(GATK_INDELREALIGNER.out.bam, fasta, fasta_fai, fasta_dict, ch_known_sites.toLis
+      **/
+
+      GATK4_BASERECALIBRATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
       ch_versions = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first())
      
 
