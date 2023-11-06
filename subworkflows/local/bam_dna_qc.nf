@@ -32,13 +32,13 @@ workflow BAM_DNA_QC {
       
       MOSDEPTH(m_bam_bai)
 
-      KNOWN_FILES = ["dbsnp_146.hg38.vcf.gz", "beta/Homo_sapiens_assembly38.known_indels.vcf.gz", "Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"]
-      GATK_BASE = "/resources/references/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/GATKBundle/"
+      //KNOWN_FILES = ["dbsnp_146.hg38.vcf.gz", "beta/Homo_sapiens_assembly38.known_indels.vcf.gz", "Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"]
+      //GATK_BASE = "/resources/references/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/GATKBundle/"
       //KNOWN_FILES = ["phix.vcf.gz"]
       //GATK_BASE = "/users/ido.tamir/work/pipelines/nf-core-controldna/resources/"
 
-      ch_known_sites = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}"} )
-      ch_known_sites_index = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}.tbi"} )
+      //ch_known_sites = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}"} )
+      //ch_known_sites_index = Channel.fromPath( KNOWN_FILES.collect{ k -> "${GATK_BASE}${k}.tbi"} )
       
       /** realigning -> baserecalibartion
       //old workflow, not really necessary, takes a long time, does not improve anything
@@ -51,8 +51,8 @@ workflow BAM_DNA_QC {
       //GATK4_BASERECALIBRATOR(GATK_INDELREALIGNER.out.bam, fasta, fasta_fai, fasta_dict, ch_known_sites.toLis
       **/
 
-      GATK4_BASERECALIBRATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
-      ch_versions = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first())
+      //GATK4_BASERECALIBRATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
+      //ch_versions = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first())
      
 
       PICARD_COLLECTMULTIPLEMETRICS(bam, fasta)
@@ -75,7 +75,7 @@ workflow BAM_DNA_QC {
         c_curve           = PRESEQ_CCURVE.out.c_curve                      // channel: [ val(meta), met ]
         mosdepth_summary  = MOSDEPTH.out.summary_txt                        // channel: [ val(meta), met ]
         mosdepth_global   = MOSDEPTH.out.global_txt                        // channel: [ val(meta), met ]
-        calibration_tables = GATK4_BASERECALIBRATOR.out.calibration_table // channel: [ val(meta), met ]
+        //calibration_tables = GATK4_BASERECALIBRATOR.out.calibration_table // channel: [ val(meta), met ]
         versions     = ch_versions
   
 }
