@@ -1,0 +1,7 @@
+sample,fastq_1,fastq_2,umi,umi_file,strandedness,subsample
+220304_370M,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220304_R1_001.fastq.gz,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220304_R2_001.fastq.gz,,,,370Mf
+220305_370M,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220305_R1_001.fastq.gz,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220305_R2_001.fastq.gz,,,,370Mf
+220306_370M,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220306_R1_001.fastq.gz,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220306_R2_001.fastq.gz,,,,370Mf
+220307_370M,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220307_R1_001.fastq.gz,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220307_R2_001.fastq.gz,,,,370Mf
+220308_370M,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220308_R1_001.fastq.gz,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220308_R2_001.fastq.gz,,,,370Mf
+220309_370M,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220309_R1_001.fastq.gz,/scratch/csfs/ido/tmp/lexogen/nova/pcr_free/220309_R2_001.fastq.gz,,,,370Mf
