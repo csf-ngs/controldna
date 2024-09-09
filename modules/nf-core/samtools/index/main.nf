@@ -11,7 +11,7 @@ process SAMTOOLS_INDEX {
     tuple val(meta), path(input)
 
     output:
-    tuple val(meta), path("*.bai") , optional:true, emit: bai
+    tuple val(meta), path("*.??i") , optional:true, emit: bai
     tuple val(meta), path("*.csi") , optional:true, emit: csi
     tuple val(meta), path("*.crai"), optional:true, emit: crai
     path  "versions.yml"           , emit: versions
@@ -24,6 +24,7 @@ process SAMTOOLS_INDEX {
     """
     samtools \\
         index \\
+        -c \\
         -@ ${task.cpus-1} \\
         $args \\
         $input

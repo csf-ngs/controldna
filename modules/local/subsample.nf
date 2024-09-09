@@ -2,7 +2,7 @@ process SEQTK_SAMPLE {
     tag "$meta.id"
 
     label 'process_medium_memory'
-    errorStrategy 'ignore'
+    errorStrategy 'finish'
 
     conda (params.enable_conda ? "bioconda::seqtk=1.3" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?

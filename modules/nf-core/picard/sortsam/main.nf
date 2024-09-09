@@ -28,6 +28,8 @@ process PICARD_SORTSAM {
         avail_mem = task.memory.giga
     }
     """
+    export TMP_DIR="." #IT20231107 the default /user/username/tmp local space was too small when in parallel with many samples
+
     picard \\
         SortSam \\
         -Xmx${avail_mem}g \\
