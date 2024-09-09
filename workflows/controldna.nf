@@ -62,6 +62,7 @@ include { MAP_BWAMEM    } from '../subworkflows/local/map_bwamem'
 include { BAM_DNA_QC    } from '../subworkflows/local/bam_dna_qc'
 include { SUBDIR        } from '../modules/local/subdir'
 include { REPORTDIR     } from '../modules/local/reportdir'
+include { PRIMER_CONTAMINANTS         } from '../modules/local/primer_contaminants'
 
 /*
 ========================================================================================
@@ -108,6 +109,11 @@ workflow CONTROLDNA {
     )
     ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
 
+    PRIMER_CONTAMINANTS(
+        INPUT_CHECK.out.reads
+    )
+    ch_versions = ch_versions.mix(PRIMER_CONTAMINANTS.out.versions.first())
+
     FASTQC_TRIMMED (
         TRIM_CUTADAPT.out.reads
     )
@@ -143,6 +149,7 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.fastqc.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.trim_log.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC_TRIMMED.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(PRIMER_CONTAMINANTS.out.stats.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.dup_metrics.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.spatial_lines_json)
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.wgs.collect{it[1]}.ifEmpty([]))

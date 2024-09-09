@@ -1,2 +1,5 @@
 sbatch --qos=medium --time=2-00:00:00 /users/ido.tamir/work/pipelines/nf-core-controldna/run_cluster.sh R17336_600k_umi /users/ido.tamir/work/pipelines/nf-core-controldna/examples/R17336/R17336_umi.csv GRCh38 R17336_600k_umi  0
 sbatch --qos=medium --time=2-00:00:00 /users/ido.tamir/work/pipelines/nf-core-controldna/run_cluster.sh R17336_600k_noumi /users/ido.tamir/work/pipelines/nf-core-controldna/examples/R17336/R17336_noumi.csv GRCh38 R17336_600k_noumi  0
+
+
+#/groups/vbcf-ngs/misc/reports/other/analysis/ido/watchmaker_dna/20240909
