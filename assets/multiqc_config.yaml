@@ -44,6 +44,7 @@ module_order:
     - mosdepth
     - preseq
     - gatk
+    - bbmap
     - custom_content:
         order:
             - tiles_dups_lines
@@ -68,6 +69,8 @@ report_section_order:
         order: 820
     preseq:
         order: 810
+    bbmap:
+        order: 806
     gatk:
         order: 805
     tiles_dups_lines:
@@ -78,3 +81,8 @@ extra_fn_clean_exts:
     - '_val'
     - '.markdup'
     - '.bqsr_table'
+    - '_aligned'
+    - '_trimmed'
+    - '_input'
+    - '_adapterdimers'
+    - '_subsample'
