@@ -44,7 +44,12 @@ module_order:
     - mosdepth
     - preseq
     - gatk
-    - bbmap
+    - bbmap:
+        name: 'Adapter dimers'
+        anchor: "adapterdimers"
+        info: 'Adapter dimer ratio (nextera and illumina)'
+        path_filters:
+            - '*adapterdimers.stats'
     - custom_content:
         order:
             - tiles_dups_lines
@@ -69,7 +74,7 @@ report_section_order:
         order: 820
     preseq:
         order: 810
-    bbmap:
+    adapterdimers:
         order: 806
     gatk:
         order: 805
