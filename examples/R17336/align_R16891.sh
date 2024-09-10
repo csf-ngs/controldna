@@ -1,2 +1,2 @@
-sbatch --qos=medium --time=2-00:00:00 /users/ido.tamir/work/pipelines/nf-core-controldna/run_cluster.sh R16891_600k_noumi /users/ido.tamir/work/pipelines/nf-core-controldna/examples/R17336/R16891_noumi.csv GRCh38  R16891_600k_noumi   0
+#sbatch --qos=medium --time=2-00:00:00 /users/ido.tamir/work/pipelines/nf-core-controldna/run_cluster.sh R16891_600k_noumi /users/ido.tamir/work/pipelines/nf-core-controldna/examples/R17336/R16891_noumi.csv GRCh38  R16891_600k_noumi   0
 sbatch --qos=medium --time=2-00:00:00 /users/ido.tamir/work/pipelines/nf-core-controldna/run_cluster.sh R16891_R17336_600k_noumi /users/ido.tamir/work/pipelines/nf-core-controldna/examples/R17336/R16891_R17336_noumi.csv GRCh38  R16891_R17336_600k_noumi   0

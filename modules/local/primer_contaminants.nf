@@ -7,7 +7,6 @@ process PRIMER_CONTAMINANTS {
 
     input:
     tuple val(meta), path(reads)
-    val processRun
 
     output:
     tuple val(meta), path("*.stats"), emit: stats
@@ -18,6 +17,7 @@ process PRIMER_CONTAMINANTS {
 
     script:
     def dimerc = "${baseDir}/resources/adapter_dimers.fa"
+    def reads_max = "reads=5000000"
     """
     bbduk.sh -Xms3G -Xmx8G in=${reads[0]} rcomp=false threads=${task.cpus} hammingdistance=1 k=12 restrictleft=13 overwrite=true ref=${dimerc} ${reads_max} stats=${meta.id}_adapterdimers.stats #1bp insert + 1mm allowed
       
