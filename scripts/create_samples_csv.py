@@ -27,7 +27,7 @@ class Sample:
               umi = "R2:NNNNNNNNNNN"
            else:
               read3 = ""
-        return ",".join([self.id, self.r1, read2, umi, read3, ",", subsample])
+        return ",".join([self.id, self.r1, read2, umi, read3, "", subsample])
 
     @staticmethod
     def to_header() -> str:

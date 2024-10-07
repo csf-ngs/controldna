@@ -2,6 +2,8 @@
 * MarkDuplicates.metrics.txt => duplicates html report
 * MarkDuplicates.metrics.txt => multiqc
 
+* replace cutadapt with fastp
+
 * preseq fails; I think the biocontainer was compiled without --enable-hts
   [github issue](https://github.com/smithlabcode/preseq/issues/59)
 
