@@ -158,7 +158,7 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.c_curve.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.mosdepth_global.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.mosdepth_summary.collect{it[1]}.ifEmpty([]))
-    //ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.calibration_tables) //.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.calibration_tables) //[calibration_table].collect{it[1]}.ifEmpty([]))
     SUBDIR("stats", ch_multiqc_files.collect())
 
     MULTIQC (
