@@ -53,7 +53,7 @@ workflow TRIM_FASTP {
 
     emit:
     reads = trim_reads // channel: [ val(meta), [ reads ] ]
-    fastqc = FASTP.out.zip //
+    fastqc = FASTQC.out.zip //
     trim_log           // channel: [ val(meta), [ txt ] ]
 
     versions = ch_versions.ifEmpty(null) // channel: [ versions.yml
