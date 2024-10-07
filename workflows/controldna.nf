@@ -57,7 +57,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK   } from '../subworkflows/local/input_check'
-include { TRIM_CUTADAPT } from '../subworkflows/local/trim_cutadapt'
+include { TRIM_FASTP    } from '../subworkflows/local/trim_fastp'
 include { MAP_BWAMEM    } from '../subworkflows/local/map_bwamem'
 include { BAM_DNA_QC    } from '../subworkflows/local/bam_dna_qc'
 include { SUBDIR        } from '../modules/local/subdir'
@@ -104,10 +104,10 @@ workflow CONTROLDNA {
     //
     //SUBWORKFLOW trim cutadapt
     // todo false => param.skipTrim
-    TRIM_CUTADAPT(
+    TRIM_FASTP(
         INPUT_CHECK.out.reads, false, subsample_str
     )
-    ch_versions = ch_versions.mix(TRIM_CUTADAPT.out.versions.first())
+    ch_versions = ch_versions.mix(TRIM_FASTP.out.versions.first())
 
     PRIMER_CONTAMINANTS(
         INPUT_CHECK.out.reads
@@ -115,13 +115,13 @@ workflow CONTROLDNA {
     ch_versions = ch_versions.mix(PRIMER_CONTAMINANTS.out.versions.first())
 
     FASTQC_TRIMMED (
-        TRIM_CUTADAPT.out.reads
+        TRIM_FASTP.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC_TRIMMED.out.versions.first())
 
 
     MAP_BWAMEM(
-        TRIM_CUTADAPT.out.reads, Channel.fromPath(bwa_index).collect()
+        TRIM_FASTP.out.reads, Channel.fromPath(bwa_index).collect()
     )
     ch_versions = ch_versions.mix(MAP_BWAMEM.out.versions.first())
 
@@ -146,8 +146,8 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.fastqc.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(TRIM_CUTADAPT.out.trim_log.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(TRIM_FASTP.out.fastqc.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(TRIM_FASTP.out.trim_log.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC_TRIMMED.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(PRIMER_CONTAMINANTS.out.stats.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.dup_metrics.collect{it[1]}.ifEmpty([]))

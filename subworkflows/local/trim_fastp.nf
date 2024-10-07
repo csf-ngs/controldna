@@ -1,9 +1,9 @@
 include { SEQTK_SAMPLE  } from '../../modules/local/subsample'
-include { CUTADAPT     } from '../../modules/local/cutadapt'
+include { FASTP         } from '../../modules/local/fastp'
 include { UMI_PROCESS  } from './umi_process'
 include { FASTQC       } from '../../modules/nf-core/fastqc/main'
 
-workflow TRIM_CUTADAPT {
+workflow TRIM_FASTP {
 
     take:
     reads         // channel: [ val(meta), [ reads ] ]
@@ -45,15 +45,15 @@ workflow TRIM_CUTADAPT {
     trim_log   = Channel.empty()
 
     if (!skip_trimming) {
-        CUTADAPT ( SEQTK_SAMPLE.out.reads ).reads.set{ trim_reads }
-        trim_log    = CUTADAPT.out.log
-        ch_versions = ch_versions.mix(CUTADAPT.out.versions.first())
+        FASTP ( SEQTK_SAMPLE.out.reads ).reads.set{ trim_reads }
+        trim_log    = FASTP.out.log.mix(FASTP.out.json)
+        ch_versions = ch_versions.mix(FASTP.out.versions.first())
     }
 
 
     emit:
     reads = trim_reads // channel: [ val(meta), [ reads ] ]
-    fastqc = FASTQC.out.zip //
+    fastqc = FASTP.out.zip //
     trim_log           // channel: [ val(meta), [ txt ] ]
 
     versions = ch_versions.ifEmpty(null) // channel: [ versions.yml
