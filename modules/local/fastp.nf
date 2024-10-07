@@ -13,7 +13,7 @@ process FASTP {
     output:
     tuple val(meta), path("*.fastq.gz")     , emit: reads
     tuple val(meta), path('*.json')         , emit: json
-    tuple val(meta), path('*.log')          , emit: log
+    tuple val(meta), path('*.log')          , emit: log //fastp log is huge and not needed
     path "versions.yml"                     , emit: versions
 
     when:
@@ -51,7 +51,6 @@ process FASTP {
     """
     fastp \\
         --stdout \\
-        --cores $task.cpus \\
         --thread $task.cpus \\
         --html ${prefix}.fastp.html \\
         --json ${prefix}.fastp.json \\

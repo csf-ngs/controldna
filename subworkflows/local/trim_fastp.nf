@@ -25,7 +25,8 @@ workflow TRIM_FASTP {
 
     umi_processed = reads_umi.no_umi.mix(UMI_PROCESS.out.reads)
 
-
+    //TODO: try to shift smart subsample before UMI processing
+    //problem is that we might need 3-4 fastq files, not the 2 standard ones
     SEQTK_SAMPLE (
          umi_processed, subsample_nr
     )
@@ -46,7 +47,7 @@ workflow TRIM_FASTP {
 
     if (!skip_trimming) {
         FASTP ( SEQTK_SAMPLE.out.reads ).reads.set{ trim_reads }
-        trim_log    = FASTP.out.log.mix(FASTP.out.json)
+        trim_log    = FASTP.out.json
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
     }
 
@@ -58,5 +59,6 @@ workflow TRIM_FASTP {
 
     versions = ch_versions.ifEmpty(null) // channel: [ versions.yml
 }
+
 
 
