@@ -50,7 +50,6 @@ process FASTP {
 
     """
     fastp \\
-        --stdout \\
         --thread $task.cpus \\
         --html ${prefix}.fastp.html \\
         --json ${prefix}.fastp.json \\
