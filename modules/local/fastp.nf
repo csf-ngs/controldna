@@ -47,12 +47,14 @@ process FASTP {
     def freads = meta.single_end ? "-i ${reads[0]}" : "-i ${reads[0]} -I ${reads[1]}"
     def oreads = meta.single_end ? "-o ${prefix}.fastq.gz" : "-o ${prefix}_1.fastq.gz -O ${prefix}_2.fastq.gz"
     def detect_pe = meta.single_end ? "" : "--detect_adapter_for_pe"
+    def trimm_poly = " --trim_poly_g --trim_poly_x "
 
     """
     fastp \\
         --thread $task.cpus \\
         --html ${prefix}.fastp.html \\
         --json ${prefix}.fastp.json \\
+        $trim_poly \\
         $freads \\
         $oreads \\
         $detect_pe \\
