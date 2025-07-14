@@ -33,10 +33,8 @@ GENOME=$3  #"hg38 GRCm38 TAIR10 WBcel235 BDGP6 #https://emea.support.illumina.co
 TITLE=$4
 SUB=$5
 
+EXTRA_ARGS="${@:6}"
 
-
-#STUB="-stub-run"
-STUB=""
 
 ALIGN_WF_BASEDIR=/scratch/${USER}/ngs_alignments/control_dna/${PROJECT}
 
@@ -53,6 +51,18 @@ cd ${ALIGN_WF_BASEDIR}
 
 REPORT=/groups/vbcf-ngs/misc/reports/other/dna_indel
 
-nextflow run ~/work/pipelines/nf-core-controldna --input ${SAMPLES} --genome ${GENOME} --multiqc_title ${TITLE} --subsample ${SUB} --reportdir $REPORT -resume -profile cbe $STUB
+echo "extra: ${EXTRA_ARGS}"
+
+
+
+nextflow run ~/work/pipelines/nf-core-controldna \
+                                --input ${SAMPLES} \
+                                --genome ${GENOME}\
+                                --multiqc_title ${TITLE} \
+                                --subsample ${SUB} \
+                                --reportdir $REPORT \
+                                --extra_fastp_args ' --max_len1 150 ' \
+                                ${EXTRA_ARGS} \
+                                -resume -profile cbe 
 
 

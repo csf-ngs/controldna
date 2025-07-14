@@ -7,4 +7,6 @@ generate
 
 cat R17000_novax.csv R17000_aviti.csv > R17000.csv
 
+/groups/vbcf-ngs/misc/reports/other/analysis/ido/aviti_novax/R17000
+
 ```

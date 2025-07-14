@@ -1,0 +1,2 @@
+sample,fastq_1,fastq_2,umi,umi_file,strandedness,subsample
+351132,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_6_R18981_20250609/demultiplexed/351132/351132_S3_R1_001.fastq.gz,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_6_R18981_20250609/demultiplexed/351132/351132_S3_R2_001.fastq.gz,,,,0
