@@ -1,0 +1,6 @@
+sample,fastq_1,fastq_2,umi,umi_file,strandedness,subsample
+350225_all,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R1_001.fastq.gz,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R2_001.fastq.gz,,,,0
+350225_1000,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R1_001.fastq.gz,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R2_001.fastq.gz,,,,1000M
+350225_500,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R1_001.fastq.gz,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R2_001.fastq.gz,,,,500M
+350225_250,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R1_001.fastq.gz,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R2_001.fastq.gz,,,,250M
+350225_100,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R1_001.fastq.gz,/scratch/csfs/ido/tmp/undemultiplexed/232LMYLT3_2_R18913_fqfull_20250609/fulllane/R18913_S0_R2_001.fastq.gz,,,,100M
