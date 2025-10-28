@@ -51,8 +51,9 @@ workflow BAM_DNA_QC {
       //GATK4_BASERECALIBRATOR(GATK_INDELREALIGNER.out.bam, fasta, fasta_fai, fasta_dict, ch_known_sites.toLis
       **/
 
-      GATK4_BASERECALIBRATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
-      ch_versions = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first())
+      //diabaled recalibrating for dm4
+      //GATK4_BASERECALIBRATOR(m_bam_bai, fasta, fasta_fai, fasta_dict, ch_known_sites.toList(), ch_known_sites_index.toList())
+      //ch_versions = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first())
      
 
       PICARD_COLLECTMULTIPLEMETRICS(bam, fasta)
@@ -75,7 +76,7 @@ workflow BAM_DNA_QC {
         c_curve           = PRESEQ_CCURVE.out.c_curve                      // channel: [ val(meta), met ]
         mosdepth_summary  = MOSDEPTH.out.summary_txt                        // channel: [ val(meta), met ]
         mosdepth_global   = MOSDEPTH.out.global_txt                        // channel: [ val(meta), met ]
-        calibration_tables = GATK4_BASERECALIBRATOR.out.calibration_table // channel: table
+        //calibration_tables = GATK4_BASERECALIBRATOR.out.calibration_table // channel: table
         versions     = ch_versions
   
 }

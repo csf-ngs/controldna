@@ -24,8 +24,11 @@ process SEQTK_SAMPLE {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
     def fq = "/groups/vbcf-ngs/bin/preprocessing/fastq head"
+    def sm = "/groups/vbcf-ngs/bin/preprocessing/fastq sample"
     //string because of bigint size
     def (fixed, subsample_size) = Utils.subsample_number(meta.subsample, subsample_str)
+
+
 
     if (meta.single_end) {
         if(subsample_size == "0"){
@@ -41,12 +44,11 @@ process SEQTK_SAMPLE {
         } else if (fixed == "sample"){
 
         """
-        seqtk \\
-            sample \\
-            $args -2 \\
-            $reads \\
-            $subsample_size \\
-            | gzip --no-name > ${prefix}.fastq.gz \\
+        ${sm}\\
+            --inpath $reads \\
+            --snumber ${subsample_size} \\
+            --outpath ${prefix}.fastq.gz
+
 
         cat <<-END_VERSIONS > versions.yml
         "${task.process}":
@@ -57,7 +59,7 @@ process SEQTK_SAMPLE {
         """
         ${fq} --inpath $reads --outpath ${prefix}.fastq.gz --snumber ${subsample_size}
 
-                cat <<-END_VERSIONS > versions.yml
+        cat <<-END_VERSIONS > versions.yml
         "${task.process}":
             seqtk: \$(echo \$(seqtk 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
         END_VERSIONS
@@ -79,19 +81,15 @@ process SEQTK_SAMPLE {
             """
         } else if(fixed == "sample"){
         """
-        seqtk \\
-            sample \\
-            $args -2 \\
-            ${reads[0]} \\
-            $subsample_size \\
-            | gzip --no-name > ${prefix}_1.fastq.gz \\
+        ${sm}\\
+            --inpath ${reads[0]} \\
+            --snumber ${subsample_size} \\
+            --outpath ${prefix}_1.fastq.gz
 
-        seqtk \\
-            sample \\
-            $args -2 \\
-            ${reads[1]} \\
-            $subsample_size \\
-            | gzip --no-name > ${prefix}_2.fastq.gz \\
+        ${sm}\\
+            --inpath ${reads[1]} \\
+            --snumber ${subsample_size} \\
+            --outpath ${prefix}_2.fastq.gz
 
         cat <<-END_VERSIONS > versions.yml
         "${task.process}":
