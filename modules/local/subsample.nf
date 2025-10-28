@@ -66,9 +66,6 @@ process SEQTK_SAMPLE {
         """
         }
     } else {
-        if (!(args ==~ /.*-s[0-9]+.*/)) {
-            args += " -s100 "
-        }
         if(subsample_size == "0"){
             """
             cp ${reads[0]} ${prefix}_1.fastq.gz
