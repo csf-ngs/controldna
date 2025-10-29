@@ -39,6 +39,7 @@ EXTRA_ARGS="${@:6}"
 ALIGN_WF_BASEDIR=/scratch/${USER}/ngs_alignments/control_dna/${PROJECT}
 
 echo "WORK: ${ALIGN_WF_BASEDIR}"
+echo "results: ${ALIGN_WF_BASEDIR}/results"
 
 export NXF_ASSETS="${ALIGN_WF_BASEDIR}"
 export NXF_WORK="${NXF_ASSETS}/work"
@@ -64,5 +65,14 @@ nextflow run ~/work/pipelines/nf-core-controldna \
                                 --extra_fastp_args ' --max_len1 150 ' \
                                 ${EXTRA_ARGS} \
                                 -resume -profile cbe 
+
+EXITCODE=$?
+
+if [ $EXITCODE -ne 0 ]; then
+    echo "Pipeline failed with exit code $EXITCODE"
+    exit $EXITCODE
+else
+    echo "results: ${ALIGN_WF_BASEDIR}/results"
+fi
 
 
