@@ -5,7 +5,7 @@ import sys, re
 import unittest
 import pysam
 
-
+# takes UMI from read name and inserts it into BAM RX tag
 
 def extract_umi(readname: str) -> str:
     rn = readname.split()[0]

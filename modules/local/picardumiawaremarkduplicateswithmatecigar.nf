@@ -37,6 +37,8 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
         $args \\
         MAX_EDIT_DISTANCE_TO_JOIN=${max_edit} \\
         OPTICAL_DUPLICATE_PIXEL_DISTANCE=2500 \\
+        TAG_DUPLICATE_SET_MEMBERS=true \\
+        TAGGING_POLICY=All \\
         I=$bam \\
         O=${prefix}.md.bam \\
         M=${prefix}.MarkDuplicates.metrics.txt \\

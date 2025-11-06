@@ -38,6 +38,9 @@ EXTRA_ARGS="${@:6}"
 
 ALIGN_WF_BASEDIR=/scratch/${USER}/ngs_alignments/control_dna/${PROJECT}
 
+NOW=$(date +"%Y%m%d %H:%M")
+
+echo "START: ${NOW}"
 echo "WORK: ${ALIGN_WF_BASEDIR}"
 echo "results: ${ALIGN_WF_BASEDIR}/results"
 
@@ -67,6 +70,9 @@ nextflow run ~/work/pipelines/nf-core-controldna \
                                 -resume -profile cbe 
 
 EXITCODE=$?
+
+NOW=$(date +"%Y%m%d %H:%M")
+echo "END: ${NOW}"
 
 if [ $EXITCODE -ne 0 ]; then
     echo "Pipeline failed with exit code $EXITCODE"
