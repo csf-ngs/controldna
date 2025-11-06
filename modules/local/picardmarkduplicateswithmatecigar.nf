@@ -37,7 +37,7 @@ process PICARD_MARKDUPLICATESWITHMATECIGAR {
         MINIMUM_DISTANCE=600 \\
         I=$bam \\
         O=${prefix}.md.bam \\
-        M=${prefix}.MarkDuplicates.metrics.txt
+        M=${prefix}.MarkDuplicatesCIGAR.metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

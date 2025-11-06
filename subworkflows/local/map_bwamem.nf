@@ -8,6 +8,7 @@ include { SAMTOOLS_SORTNAME                   } from '../../modules/local/samtoo
 include { PICARD_SORTBAM                      } from '../../modules/local/picardsortbam'
 include { ADD_UMI_TO_BAM                      } from '../../modules/local/add_umi_to_bam'
 include { SPATIAL_DUPLICATES                  } from './spatial_duplicates'
+include { PICARD_UMI_MQC                      } from '../../modules/local/picard_umi_mqc'
 
 //TODO: switch to BWA MEM2
 workflow MAP_BWAMEM {
@@ -32,9 +33,6 @@ workflow MAP_BWAMEM {
     }
     .set { bam_umi }
 
-    SPATIAL_DUPLICATES(PICARD_SORTBAM.out.bam)
-    ch_versions = ch_versions.mix(SPATIAL_DUPLICATES.out.versions.first())
-
     ADD_UMI_TO_BAM(bam_umi.umi)
     PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR(ADD_UMI_TO_BAM.out.bam)
     ch_versions = ch_versions.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.versions.first())
@@ -42,21 +40,27 @@ workflow MAP_BWAMEM {
     PICARD_MARKDUPLICATESWITHMATECIGAR(bam_umi.no_umi)
     ch_versions = ch_versions.mix(PICARD_MARKDUPLICATESWITHMATECIGAR.out.versions.first())
 
+    PICARD_UMI_MQC(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.metrics.mix(PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics))
+    ch_versions = ch_versions.mix(PICARD_UMI_MQC.out.versions.first())
+
     marked_bams = PICARD_MARKDUPLICATESWITHMATECIGAR.out.bam.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.bam)
 
     SAMTOOLS_SORT(marked_bams)
     ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
 
+    SPATIAL_DUPLICATES(SAMTOOLS_SORT.out.bam)
+    ch_versions = ch_versions.mix(SPATIAL_DUPLICATES.out.versions.first())
+
     SAMTOOLS_INDEX(SAMTOOLS_SORT.out.bam)
     bam_indexed = SAMTOOLS_INDEX.out.bai
-    
+
     bam_bai =  SAMTOOLS_SORT.out.bam.join(SAMTOOLS_INDEX.out.bai)
 
     emit:
         bam_bai     = bam_bai
         bam         = SAMTOOLS_SORT.out.bam        //  channel: [ val(meta), bai ]
         bai         = SAMTOOLS_INDEX.out.bai       // channel: [ val(meta), bam ]
-        dup_metrics = PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.metrics)
+        dup_metrics = PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.metrics).mix(PICARD_UMI_MQC.out.mqc_metrics) // channel: metrics files
         spatial_html = SPATIAL_DUPLICATES.out.report_html
         spatial_lines_json = SPATIAL_DUPLICATES.out.lines_json
         spatial_tabs = SPATIAL_DUPLICATES.out.tabs

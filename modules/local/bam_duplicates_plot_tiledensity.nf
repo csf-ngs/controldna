@@ -2,7 +2,7 @@ process BAM_DUPLICATES_PLOT_TILEDENSITY {
     tag "plottiles"
     label 'process_low'
     
-    container "/groups/vbcf-ngs/misc/infra/singularity/amd64/pipeline/pipgen_latest.sif" //markdown, ggplot viridis, collectcontrolresults
+    container "${ params.pipgencontainer }" //markdown, ggplot viridis, collectcontrolresults
 
     input:
     path(tabs)

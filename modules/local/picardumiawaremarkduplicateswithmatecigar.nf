@@ -41,7 +41,7 @@ process PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR {
         TAGGING_POLICY=All \\
         I=$bam \\
         O=${prefix}.md.bam \\
-        M=${prefix}.MarkDuplicates.metrics.txt \\
+        M=${prefix}.MarkDuplicatesUMI.metrics.txt \\
         UMI_METRICS=${prefix}.MD_umi.metrics.txt
 
 
