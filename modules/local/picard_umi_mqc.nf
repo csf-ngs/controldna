@@ -9,7 +9,6 @@ process PICARD_UMI_MQC {
 
     output:
     path("*.yaml") , emit: mqc_metrics
-    path("duplications_tiles.html")     , emit: html
     path("versions.yml")                , emit: versions
 
     when:
@@ -19,7 +18,7 @@ process PICARD_UMI_MQC {
     def args = task.ext.args ?: ''
 
     """
-       picard_umi_metrics mqc --metrics_dir . --outpath_base . 
+       picard_umi_metrics mqc --metrics_dir . --outpathbase . 
 
        cat <<-END_VERSIONS > versions.yml
        "${task.process}":

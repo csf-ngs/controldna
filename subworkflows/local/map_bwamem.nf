@@ -40,7 +40,13 @@ workflow MAP_BWAMEM {
     PICARD_MARKDUPLICATESWITHMATECIGAR(bam_umi.no_umi)
     ch_versions = ch_versions.mix(PICARD_MARKDUPLICATESWITHMATECIGAR.out.versions.first())
 
-    PICARD_UMI_MQC(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.metrics.mix(PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics))
+    PICARD_UMI_MQC(
+        PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.metrics
+            .mix(PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics)
+            .map{ meta, files -> files }
+            .flatten()
+            .toList()
+    )
     ch_versions = ch_versions.mix(PICARD_UMI_MQC.out.versions.first())
 
     marked_bams = PICARD_MARKDUPLICATESWITHMATECIGAR.out.bam.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.bam)

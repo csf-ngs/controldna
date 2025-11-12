@@ -28,6 +28,7 @@ module_order:
         path_filters:
             - '*input_2_fastqc.zip'
     - cutadapt
+    - fastp
     - fastqc:
         name: 'FastQC r1 (trimmed)'
         anchor: "trimmed_fastqc_r1"
@@ -41,6 +42,7 @@ module_order:
         path_filters:
             - '*trimmed_2_fastqc.zip'
     - picard
+    - picard_umi_duplicates
     - mosdepth
     - preseq
     - gatk
@@ -62,18 +64,20 @@ report_section_order:
         order: 1050
     cutadapt:
         order: 1040
+    fastp:
+        order: 1000
     trimmed_fastqc_r1:
         order: 900
     trimmed_fastqc_r2:
         order: 850
     picard:
         order: 840
+    picard_umi_duplicates:
+        order: 835
     mosdepth:
         order: 830
     preseq:
         order: 820
-    preseq:
-        order: 810
     adapterdimers:
         order: 806
     gatk:
@@ -91,3 +95,4 @@ extra_fn_clean_exts:
     - '_input'
     - '_adapterdimers'
     - '_subsample'
+    - '_umi'

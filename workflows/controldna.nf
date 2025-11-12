@@ -150,7 +150,7 @@ workflow CONTROLDNA {
     ch_multiqc_files = ch_multiqc_files.mix(TRIM_FASTP.out.trim_log.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC_TRIMMED.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(PRIMER_CONTAMINANTS.out.stats.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.dup_metrics.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.dup_metrics.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(MAP_BWAMEM.out.spatial_lines_json)
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.wgs.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_DNA_QC.out.multiple.collect{it[1]}.ifEmpty([]))
