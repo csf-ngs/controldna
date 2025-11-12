@@ -66,7 +66,8 @@ workflow MAP_BWAMEM {
         bam_bai     = bam_bai
         bam         = SAMTOOLS_SORT.out.bam        //  channel: [ val(meta), bai ]
         bai         = SAMTOOLS_INDEX.out.bai       // channel: [ val(meta), bam ]
-        dup_metrics = PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.metrics).mix(PICARD_UMI_MQC.out.mqc_metrics) // channel: metrics files
+        dup_metrics = PICARD_MARKDUPLICATESWITHMATECIGAR.out.metrics.mix(PICARD_UMIAWAREMARKDUPLICATESWITHMATECIGAR.out.metrics)
+        umi_metrics  = PICARD_UMI_MQC.out.mqc_metrics // channel: metrics files
         spatial_html = SPATIAL_DUPLICATES.out.report_html
         spatial_lines_json = SPATIAL_DUPLICATES.out.lines_json
         spatial_tabs = SPATIAL_DUPLICATES.out.tabs
