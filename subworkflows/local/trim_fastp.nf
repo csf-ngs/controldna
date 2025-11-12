@@ -27,9 +27,21 @@ workflow TRIM_FASTP {
 
     //TODO: try to shift smart subsample before UMI processing
     //problem is that we might need 3-4 fastq files, not the 2 standard ones
-    SEQTK_SAMPLE (
-         umi_processed, subsample_nr
-    )
+
+    //Fixed seed for reproducibility
+    //random_seed = 42
+    //SEQTK_SAMPLE (
+    //     umi_processed, subsample_nr, random_seed
+    //)
+
+    //random seed subsample each sample
+    val random = new Random(42)
+    umi_processed.map { meta, reads ->
+        def random_seed = random.nextInt(10000)
+        return tuple( tuple(meta, reads), subsample_nr, random_seed )
+    }.set { umi_processed_with_seed }
+    SEQTK_SAMPLE ( umi_processed_with_seed )
+
     ch_versions = ch_versions.mix(SEQTK_SAMPLE.out.versions.first())
 
     //

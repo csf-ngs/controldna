@@ -12,6 +12,7 @@ process SEQTK_SAMPLE {
     input:
     tuple val(meta), path(reads)
     val subsample_str
+    val random_seed
 
     output:
     tuple val(meta), path("*.fastq.gz"), emit: reads
@@ -25,6 +26,7 @@ process SEQTK_SAMPLE {
     def prefix = task.ext.prefix ?: "${meta.id}_subsample"
     def fq = "/groups/vbcf-ngs/bin/preprocessing/fastq head"
     def sm = "/groups/vbcf-ngs/bin/preprocessing/fastq sample"
+
     //string because of bigint size
     def (fixed, subsample_size) = Utils.subsample_number(meta.subsample, subsample_str)
 
@@ -47,6 +49,7 @@ process SEQTK_SAMPLE {
         ${sm}\\
             --inpath $reads \\
             --snumber ${subsample_size} \\
+            --seed ${random_seed} \\
             --outpath ${prefix}.fastq.gz
 
 
@@ -81,11 +84,13 @@ process SEQTK_SAMPLE {
         ${sm}\\
             --inpath ${reads[0]} \\
             --snumber ${subsample_size} \\
+            --seed ${random_seed} \\
             --outpath ${prefix}_1.fastq.gz
 
         ${sm}\\
             --inpath ${reads[1]} \\
             --snumber ${subsample_size} \\
+            --seed ${random_seed} \\
             --outpath ${prefix}_2.fastq.gz
 
         cat <<-END_VERSIONS > versions.yml
