@@ -10,9 +10,7 @@ process SEQTK_SAMPLE {
         'quay.io/biocontainers/seqtk:1.3--h5bf99c6_3' }"
 
     input:
-    tuple val(meta), path(reads)
-    val subsample_str
-    val random_seed
+    tuple val(meta), path(reads), val(subsample_str), val(random_seed)
 
     output:
     tuple val(meta), path("*.fastq.gz"), emit: reads
